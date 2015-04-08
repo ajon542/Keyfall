@@ -28,6 +28,11 @@ public class LevelRoot : MonoBehaviour
     public int levelDimensions = 5;
 
     /// <summary>
+    /// Probability of generating a room.
+    /// </summary>
+    public int roomProbability = 75;
+
+    /// <summary>
     /// Split the level into a grid. A room can be placed
     /// in each grid location to ensure there is not room
     /// overlap.
@@ -66,17 +71,21 @@ public class LevelRoot : MonoBehaviour
         {
             for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ++)
             {
-                // Generate a room width and length.
-                int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
-                int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
+                // Generate room based on a given percentage.
+                if (rnd.Next(100) < roomProbability)
+                {
+                    // Generate a room width and length.
+                    int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
+                    int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
 
-                // Position the room within the grid location.
-                int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
-                int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
+                    // Position the room within the grid location.
+                    int positionX = rnd.Next(0, gridSize - width) + gridLocationX*gridSize;
+                    int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ*gridSize;
 
-                // Create the room.
-                Room room = CreateRoom(new Vector3(positionX, transform.position.y, positionZ), width, length);
-                rooms[gridLocationX, gridLocationZ] = room;
+                    // Create the room.
+                    Room room = CreateRoom(new Vector3(positionX, transform.position.y, positionZ), width, length);
+                    rooms[gridLocationX, gridLocationZ] = room;
+                }
             }
         }
     }
