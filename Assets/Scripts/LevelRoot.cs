@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The root of a level contains the rooms and connecting tunnels.
+/// </summary>
 public class LevelRoot : MonoBehaviour
 {
     /// <summary>
@@ -50,6 +53,7 @@ public class LevelRoot : MonoBehaviour
     private void GenerateRooms()
     {
         System.Random rnd = new System.Random();
+        rooms = new List<Room>();
 
         // Generate a room in each grid location.
         for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX += gridSize)
@@ -65,10 +69,12 @@ public class LevelRoot : MonoBehaviour
                 int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ;
 
                 // Create the room.
-                rooms = new List<Room>();
-                rooms.Add(CreateRoom(new Vector3(positionX, transform.position.y, positionZ), width, length));
+                Room room = CreateRoom(new Vector3(positionX, transform.position.y, positionZ), width, length);
+                rooms.Add(room);
             }
         }
+
+        Debug.Log("Number of rooms created: " + rooms.Count);
     }
 
     /// <summary>
