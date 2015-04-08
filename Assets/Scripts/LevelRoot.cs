@@ -18,16 +18,21 @@ public class LevelRoot : MonoBehaviour
     public int maxRoomDimensions = 15;
 
     /// <summary>
+    /// Minimum gap between the rooms.
+    /// </summary>
+    public int minRoomGap = 5;
+
+    /// <summary>
     /// The level dimensions.
     /// </summary>
-    public int levelDimensions = 100;
+    public int levelDimensions = 5;
 
     /// <summary>
     /// Split the level into a grid. A room can be placed
     /// in each grid location to ensure there is not room
     /// overlap.
     /// </summary>
-    public int gridSize = 20;
+    private int gridSize;
 
     /// <summary>
     /// The room prefab.
@@ -37,13 +42,14 @@ public class LevelRoot : MonoBehaviour
     /// <summary>
     /// List of the generated rooms.
     /// </summary>
-    private List<Room> rooms; 
+    private Room[,] rooms;
 
     /// <summary>
     /// Level startup.
     /// </summary>
     private void Start()
     {
+        gridSize = maxRoomDimensions + minRoomGap;
         GenerateRooms();
     }
 
@@ -53,28 +59,26 @@ public class LevelRoot : MonoBehaviour
     private void GenerateRooms()
     {
         System.Random rnd = new System.Random();
-        rooms = new List<Room>();
+        rooms = new Room[levelDimensions, levelDimensions];
 
         // Generate a room in each grid location.
-        for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX += gridSize)
+        for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX++)
         {
-            for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ += gridSize)
+            for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ++)
             {
                 // Generate a room width and length.
                 int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
                 int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
 
                 // Position the room within the grid location.
-                int positionX = rnd.Next(0, gridSize - width) + gridLocationX;
-                int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ;
+                int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
+                int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
 
                 // Create the room.
                 Room room = CreateRoom(new Vector3(positionX, transform.position.y, positionZ), width, length);
-                rooms.Add(room);
+                rooms[gridLocationX, gridLocationZ] = room;
             }
         }
-
-        Debug.Log("Number of rooms created: " + rooms.Count);
     }
 
     /// <summary>
