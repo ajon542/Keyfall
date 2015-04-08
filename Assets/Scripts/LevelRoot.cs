@@ -11,7 +11,7 @@ public class LevelRoot : MonoBehaviour
     /// <summary>
     /// Maximum room width or length.
     /// </summary>
-    public int maxRoomDimensions = 10;
+    public int maxRoomDimensions = 15;
 
     /// <summary>
     /// The level dimensions.
@@ -19,9 +19,10 @@ public class LevelRoot : MonoBehaviour
     public int levelDimensions = 100;
 
     /// <summary>
-    /// The number of rooms in this level.
+    /// Split the level dimensions into a grid to place each
+    /// room in so the rooms do not overlap.
     /// </summary>
-    public int numberOfRooms = 10;
+    public int gridSize = 20;
 
     /// <summary>
     /// The room prefab.
@@ -37,16 +38,23 @@ public class LevelRoot : MonoBehaviour
     {
         System.Random rnd = new System.Random();
 
-        for (int roomCount = 0; roomCount < numberOfRooms; ++roomCount)
+        // Generate a room in each grid location.
+        for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX += gridSize)
         {
-            int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
-            int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
+            for (int gridLocationY = 0; gridLocationY < levelDimensions; gridLocationY += gridSize)
+            {
+                // Generate a room width and length.
+                int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
+                int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
 
-            int positionX = rnd.Next(levelDimensions);
-            int positionZ = rnd.Next(levelDimensions);
+                // Position the room within the grid location.
+                int positionX = rnd.Next(0, gridSize - width) + gridLocationX;
+                int positionZ = rnd.Next(0, gridSize - length) + gridLocationY;
 
-            rooms = new List<Room>();
-            rooms.Add(CreateRoom(new Vector2(positionX, positionZ), width, length));
+                // Create the room.
+                rooms = new List<Room>();
+                rooms.Add(CreateRoom(new Vector2(positionX, positionZ), width, length));
+            }
         }
     }
 
