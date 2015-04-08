@@ -17,6 +17,11 @@ public class Room : MonoBehaviour
     public GameObject wall;
 
     /// <summary>
+    /// The prefab used for the doors.
+    /// </summary>
+    public GameObject door;
+
+    /// <summary>
     /// The array storing the total floor area.
     /// </summary>
     private GameObject[,] floorArea;
@@ -30,6 +35,11 @@ public class Room : MonoBehaviour
     /// The east wall of the room.
     /// </summary>
     private List<GameObject> eastWall;
+
+    /// <summary>
+    /// The east wall of the room.
+    /// </summary>
+    private List<GameObject> doors;
 
     /// <summary>
     /// Gets the width of the room.
