@@ -44,3 +44,8 @@ Temporary Items
 
 bin
 obj
+Library
+Temp
+*.csproj
+*.sln
+*.DotSettings
