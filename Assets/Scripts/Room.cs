@@ -9,7 +9,7 @@ public class Room : MonoBehaviour
     public int Width { get; private set; }
     public int Length { get; private set; }
 
-    public void GenerateRoom(Vector2 position, int width, int length)
+    public void GenerateRoom(Vector3 position, int width, int length)
     {
         Width = width;
         Length = length;
@@ -20,7 +20,7 @@ public class Room : MonoBehaviour
         {
             for (int j = 0; j < length; ++j)
             {
-                floorArea[i, j] = Instantiate(floorTile, new Vector3(position.x + i, 0, position.y + j), new Quaternion(1, 0, 0, 1)) as GameObject;
+                floorArea[i, j] = Instantiate(floorTile, new Vector3(position.x + i, position.y, position.z + j), new Quaternion(1, 0, 0, 1)) as GameObject;
             }
         }
     }
