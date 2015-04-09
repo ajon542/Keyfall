@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DungeonLayoutView : IGameView
 {
@@ -38,11 +37,15 @@ public class DungeonLayoutView : IGameView
         // Generate each floor tile.
         floorArea = new GameObject[Width, Length];
 
-        for (int i = 0; i < msg.Width; ++i)
+        for (int i = 0; i < Width; ++i)
         {
-            for (int j = 0; j < msg.Length; ++j)
+            for (int j = 0; j < Length; ++j)
             {
-                floorArea[i, j] = Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
+                if (floorplan[i, j] == DungeonLayout.Floor)
+                {
+                    floorArea[i, j] =
+                        Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
+                }
             }
         }
     }

@@ -67,20 +67,8 @@ public class Room : MonoBehaviour
         Position = position;
         Width = width;
         Length = length;
-        
-        GenerateDoors();
+
         GenerateWalls();
-        GenerateFloor();
-    }
-
-    private void GenerateDoors()
-    {
-        doors = new List<GameObject>();
-
-        // Determine how many doors the room will have.
-        // At least 1 and at most 4.
-        System.Random rnd = new System.Random();
-        int doorCount = rnd.Next(1, 5);
     }
 
     private void GenerateWalls()
@@ -100,20 +88,6 @@ public class Room : MonoBehaviour
         {
             GameObject obj = Instantiate(wall, new Vector3(Position.x + Width - 0.5f, Position.y + 0.5f, Position.z + i), Quaternion.Euler(0, 90, 0)) as GameObject;
             eastWall.Add(obj);
-        }
-    }
-
-    private void GenerateFloor()
-    {
-        // Generate each floor tile.
-        floorArea = new GameObject[Width, Length];
-
-        for (int i = 0; i < Width; ++i)
-        {
-            for (int j = 0; j < Length; ++j)
-            {
-                floorArea[i, j] = Instantiate(floorTile, new Vector3(Position.x + i, Position.y, Position.z + j), new Quaternion(1, 0, 0, 1)) as GameObject;
-            }
         }
     }
 }
