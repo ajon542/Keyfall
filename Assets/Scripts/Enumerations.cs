@@ -8,3 +8,15 @@ public enum Direction
     East,
     West
 }
+
+public enum DungeonLayout
+{
+    Unknown,
+    Floor,
+    NorthWall,
+    SouthWall,
+    EastWall,
+    WestWall,
+    Door,
+    Stairs
+}

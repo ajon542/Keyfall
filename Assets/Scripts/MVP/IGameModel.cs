@@ -14,7 +14,7 @@ public abstract class IGameModel : MonoBehaviour
     /// Initialize the game model.
     /// </summary>
     /// <param name="presenter">The game presenter.</param>
-    public void Initialize(Presenter presenter)
+    public virtual void Initialize(Presenter presenter)
     {
         this.presenter = presenter;
     }
