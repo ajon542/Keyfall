@@ -42,7 +42,7 @@ public abstract class IGameView : MonoBehaviour
         }
     }
 
-    public void UpdateView()
+    public virtual void UpdateView()
     {
         
     }

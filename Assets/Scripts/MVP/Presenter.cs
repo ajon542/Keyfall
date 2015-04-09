@@ -4,8 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BaseMsg
+{ 
+}
+
+public class SampleMsg : BaseMsg
 {
-    
+}
+
+public class RoomMsg : BaseMsg
+{
 }
 
 public class Presenter : MonoBehaviour
