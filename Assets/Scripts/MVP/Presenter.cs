@@ -17,7 +17,7 @@ public class RoomMsg : BaseMsg
 
 public class Presenter : MonoBehaviour
 {
-    private IGameModel gameModel;
+    public IGameModel gameModel;
     private List<IGameView> gameViews = new List<IGameView>();
 
     private void Awake()
