@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class DungeonLayoutView : IGameView
 {
@@ -22,7 +23,7 @@ public class DungeonLayoutView : IGameView
     /// </summary>
     public int Length { get; private set; }
 
-    private DungeonLayout[,] floorplan;
+    private IGraph<Room> roomGraph;
 
     [RecvMsgMethod]
     public void HandleFloorPlanMsg(FloorPlanMsg msg)
@@ -32,20 +33,24 @@ public class DungeonLayoutView : IGameView
         // Keep track of the floor plan properties.
         Width = msg.Width;
         Length = msg.Length;
-        floorplan = msg.Floorplan;
-
-        // Generate each floor tile.
+        roomGraph = msg.RoomGraph;
         floorArea = new GameObject[Width, Length];
+        List<Room> rooms = roomGraph.VertexList;
 
-        for (int i = 0; i < Width; ++i)
+        foreach (Room room in rooms)
         {
-            for (int j = 0; j < Length; ++j)
+            GenerateRoom(room);
+        }
+    }
+
+    private void GenerateRoom(Room room)
+    {
+        for (int i = 0; i < room.Width; ++i)
+        {
+            for (int j = 0; j < room.Length; ++j)
             {
-                if (floorplan[i, j] == DungeonLayout.Floor)
-                {
-                    floorArea[i, j] =
-                        Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
-                }
+                floorArea[i, j] =
+                    Instantiate(floorTile, new Vector3(room.PositionX + i, 0, room.PositionZ + j), new Quaternion(1, 0, 0, 1)) as GameObject;
             }
         }
     }

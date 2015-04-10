@@ -37,11 +37,9 @@ public class GameModel : IGameModel
     /// </summary>
     private int gridSize;
 
-    /// <summary>
-    /// The floor plan of the dungeon. This layout is passed and interpreted by
-    /// the DungeonLayoutView to generate the graphical representation. 
-    /// </summary>
-    private DungeonLayout[,] floorplan;
+    private IGraph<Room> roomGraph;
+
+    private Room[,] rooms;
 
     /// <summary>
     /// Initialize the dungeon level.
@@ -54,8 +52,25 @@ public class GameModel : IGameModel
 
         // Initialize the floor plan.
         gridSize = maxRoomDimensions + minRoomGap;
-        floorplan = new DungeonLayout[levelDimensions * gridSize, levelDimensions * gridSize];
+        roomGraph = new RoomGraph<Room>();
+        rooms = new Room[levelDimensions, levelDimensions];
 
+        GenerateRoomLayout();
+        GenerateRoomGraph();
+
+        // Publish the floor plan message.
+        FloorPlanMsg msg = new FloorPlanMsg();
+        msg.RoomGraph = roomGraph;
+        msg.Width = levelDimensions*gridSize;
+        msg.Length = levelDimensions*gridSize;
+        presenter.PublishMsg(msg);
+    }
+
+    /// <summary>
+    /// Determine the positions, widths and lengths of all the rooms.
+    /// </summary>
+    private void GenerateRoomLayout()
+    {
         // Generate a room in each grid location.
         System.Random rnd = new System.Random();
         for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX++)
@@ -73,31 +88,36 @@ public class GameModel : IGameModel
                     int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
                     int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
 
-                    // Create the floor.
-                    GenerateFloor(new Vector3(positionX, 0, positionZ), width, length);
+                    rooms[gridLocationX, gridLocationZ] = new Room(positionX, positionZ, width, length);
                 }
             }
         }
-
-        // In general, a room may be connected to another room in an adjacent gridLocation.
-        // For example a room in grid location 0,0 may be connected to a room in 0,1 and 1,0.
-        // A room must have at least one connection.
-
-        // Publish the floor plan message.
-        FloorPlanMsg msg = new FloorPlanMsg();
-        msg.Floorplan = floorplan;
-        msg.Width = levelDimensions*gridSize;
-        msg.Length = levelDimensions*gridSize;
-        presenter.PublishMsg(msg);
     }
 
-    private void GenerateFloor(Vector3 position, int width, int length)
+    /// <summary>
+    /// Create the room graph.
+    /// </summary>
+    /// <remarks>
+    /// In general, a room may be connected to another room in an adjacent gridLocation.
+    /// For example a room in grid location 0,0 may be connected to a room in 0,1 and 1,0.
+    /// A room must have at least one connection.
+    /// </remarks>
+    private void GenerateRoomGraph()
     {
-        for (int i = 0; i < width; ++i)
+        // TODO: For now just create an edge between adjacent rooms.
+        for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX++)
         {
-            for (int j = 0; j < length; ++j)
+            for (int gridLocationZ = 0; gridLocationZ < levelDimensions - 1; gridLocationZ++)
             {
-                floorplan[(int)position.x + i, (int)position.z + j] = DungeonLayout.Floor;
+                roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX, gridLocationZ + 1]);
+            }
+        }
+
+        for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ++)
+        {
+            for (int gridLocationX = 0; gridLocationX < levelDimensions - 1; gridLocationX++)
+            {
+                roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX + 1, gridLocationZ]);
             }
         }
     }

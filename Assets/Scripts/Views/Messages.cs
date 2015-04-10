@@ -16,7 +16,7 @@ public class RoomMsg : BaseMsg
 
 public class FloorPlanMsg : BaseMsg
 {
-    public DungeonLayout[,] Floorplan { get; set; }
+    public IGraph<Room> RoomGraph { get; set; }
 
     public int Width { get; set; }
     public int Length { get; set; }

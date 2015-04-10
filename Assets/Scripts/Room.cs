@@ -17,9 +17,28 @@ public class Room
     public int Length { get; private set; }
 
     /// <summary>
+    /// Gets the x-position of the room.
+    /// </summary>
+    public int PositionX { get; private set; }
+
+    /// <summary>
+    /// Gets the z-position of the room.
+    /// </summary>
+    public int PositionZ { get; private set; }
+
+    /// <summary>
     /// Gets the position of the room.
     /// </summary>
     public Vector3 Position { get; private set; }
+
+
+    public Room(int positionX, int positionZ, int width, int length)
+    {
+        PositionX = positionX;
+        PositionZ = positionZ;
+        Width = width;
+        Length = length;
+    }
 
     /// <summary>
     /// Generate a room with the given parameters.
