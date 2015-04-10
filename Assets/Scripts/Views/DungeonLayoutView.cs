@@ -9,6 +9,11 @@ public class DungeonLayoutView : IGameView
     public GameObject floorTile;
 
     /// <summary>
+    /// The prefab used for the wall.
+    /// </summary>
+    public GameObject wall;
+
+    /// <summary>
     /// The array storing the total floor area.
     /// </summary>
     private GameObject[,] floorArea;
@@ -43,6 +48,7 @@ public class DungeonLayoutView : IGameView
         foreach (Room room in rooms)
         {
             GenerateRoom(room);
+            GenerateWalls(room);
         }
     }
 
@@ -52,9 +58,31 @@ public class DungeonLayoutView : IGameView
         {
             for (int j = 0; j < room.Length; ++j)
             {
+                // TODO: This should be delegated to a RoomView.
                 floorArea[i, j] =
                     Instantiate(floorTile, new Vector3(room.PositionX + i, 0, room.PositionZ + j), new Quaternion(1, 0, 0, 1)) as GameObject;
             }
+        }
+    }
+
+    private void GenerateWalls(Room room)
+    {
+        // TODO: Keep track of the instantiated game objects.
+        //northWall = new List<GameObject>();
+        //eastWall = new List<GameObject>();
+
+        // Generate north walls.
+        for (int i = 0; i < room.Width; ++i)
+        {
+            GameObject obj = Instantiate(wall, new Vector3(room.PositionX + i, 0.5f, room.PositionZ + room.Length - 0.5f), Quaternion.identity) as GameObject;
+            //northWall.Add(obj);
+        }
+
+        // Generate east walls.
+        for (int i = 0; i < room.Length; ++i)
+        {
+            GameObject obj = Instantiate(wall, new Vector3(room.PositionX + room.Width - 0.5f, 0.5f, room.PositionZ + i), Quaternion.Euler(0, 90, 0)) as GameObject;
+            //eastWall.Add(obj);
         }
     }
 

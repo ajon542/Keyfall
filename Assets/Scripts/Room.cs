@@ -51,27 +51,5 @@ public class Room
         Position = position;
         Width = width;
         Length = length;
-
-        GenerateWalls();
-    }
-
-    private void GenerateWalls()
-    {
-        /*northWall = new List<GameObject>();
-        eastWall = new List<GameObject>();
-
-        // Generate north walls.
-        for (int i = 0; i < Width; ++i)
-        {
-            GameObject obj = Instantiate(wall, new Vector3(Position.x + i, Position.y + 0.5f, Position.z + Length - 0.5f), Quaternion.identity) as GameObject;
-            northWall.Add(obj);
-        }
-
-        // Generate east walls.
-        for (int i = 0; i < Length; ++i)
-        {
-            GameObject obj = Instantiate(wall, new Vector3(Position.x + Width - 0.5f, Position.y + 0.5f, Position.z + i), Quaternion.Euler(0, 90, 0)) as GameObject;
-            eastWall.Add(obj);
-        }*/
     }
 }
