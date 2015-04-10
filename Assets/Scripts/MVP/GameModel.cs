@@ -79,6 +79,10 @@ public class GameModel : IGameModel
             }
         }
 
+        // In general, a room may be connected to another room in an adjacent gridLocation.
+        // For example a room in grid location 0,0 may be connected to a room in 0,1 and 1,0.
+        // A room must have at least one connection.
+
         // Publish the floor plan message.
         FloorPlanMsg msg = new FloorPlanMsg();
         msg.Floorplan = floorplan;

@@ -4,43 +4,8 @@ using UnityEngine;
 /// <summary>
 /// A room contains the floor and walls.
 /// </summary>
-public class Room : MonoBehaviour
+public class Room
 {
-    /// <summary>
-    /// The prefab used for the floor.
-    /// </summary>
-    public GameObject floorTile;
-
-    /// <summary>
-    /// The prefab used for the walls.
-    /// </summary>
-    public GameObject wall;
-
-    /// <summary>
-    /// The prefab used for the doors.
-    /// </summary>
-    public GameObject door;
-
-    /// <summary>
-    /// The array storing the total floor area.
-    /// </summary>
-    private GameObject[,] floorArea;
-
-    /// <summary>
-    /// The north wall of the room.
-    /// </summary>
-    private List<GameObject> northWall;
-
-    /// <summary>
-    /// The east wall of the room.
-    /// </summary>
-    private List<GameObject> eastWall;
-
-    /// <summary>
-    /// The east wall of the room.
-    /// </summary>
-    private List<GameObject> doors;
-
     /// <summary>
     /// Gets the width of the room.
     /// </summary>
@@ -73,7 +38,7 @@ public class Room : MonoBehaviour
 
     private void GenerateWalls()
     {
-        northWall = new List<GameObject>();
+        /*northWall = new List<GameObject>();
         eastWall = new List<GameObject>();
 
         // Generate north walls.
@@ -88,6 +53,6 @@ public class Room : MonoBehaviour
         {
             GameObject obj = Instantiate(wall, new Vector3(Position.x + Width - 0.5f, Position.y + 0.5f, Position.z + i), Quaternion.Euler(0, 90, 0)) as GameObject;
             eastWall.Add(obj);
-        }
+        }*/
     }
 }
