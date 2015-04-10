@@ -6,25 +6,35 @@
 public class GameModel : IGameModel
 {
     /// <summary>
-    /// Minimum room width or length.
+    /// Minimum room width and length.
     /// </summary>
-    public int minRoomDimensions = 3;
+    [Tooltip("Minimum room width and length.")]
+    public int minRoomSize = 3;
 
     /// <summary>
-    /// Maximum room width or length. Ideally, this should
-    /// be less than the gridSize.
+    /// Maximum room width and length.
     /// </summary>
-    public int maxRoomDimensions = 15;
+    [Tooltip("Maximum room width and length.")]
+    public int maxRoomSize = 15;
 
     /// <summary>
-    /// Minimum gap between the rooms.
+    /// Average distance between the rooms.
     /// </summary>
-    public int minRoomGap = 3;
+    [Tooltip("Average distance between the rooms.")]
+    public int roomSpread = 3;
+
+    // TODO: Level dimensions of 1,1 do not work.
+    /// <summary>
+    /// The level dimensions.
+    /// </summary>
+    [Tooltip("Number of rooms in the x-direction.")]
+    public int levelDimensionsX = 5;
 
     /// <summary>
     /// The level dimensions.
     /// </summary>
-    public int levelDimensions = 5;
+    [Tooltip("Number of rooms in the z-direction.")]
+    public int levelDimensionsZ = 5;
 
     /// <summary>
     /// Split the level into a grid. A room can be placed in each grid location
@@ -52,9 +62,9 @@ public class GameModel : IGameModel
         base.Initialize(presenter);
 
         // Initialize the floor plan.
-        gridSize = maxRoomDimensions + minRoomGap;
+        gridSize = maxRoomSize + roomSpread;
         roomGraph = new RoomGraph<Room>();
-        rooms = new Room[levelDimensions, levelDimensions];
+        rooms = new Room[levelDimensionsX, levelDimensionsZ];
 
         GenerateRoomLayout();
         GenerateRoomGraph();
@@ -62,8 +72,8 @@ public class GameModel : IGameModel
         // Publish the floor plan message.
         FloorPlanMsg msg = new FloorPlanMsg();
         msg.RoomGraph = roomGraph;
-        msg.Width = levelDimensions*gridSize;
-        msg.Length = levelDimensions*gridSize;
+        msg.Width = levelDimensionsX * gridSize;
+        msg.Length = levelDimensionsZ * gridSize;
         presenter.PublishMsg(msg);
     }
 
@@ -74,13 +84,13 @@ public class GameModel : IGameModel
     {
         // Generate a room in each grid location.
         System.Random rnd = new System.Random();
-        for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX++)
+        for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
         {
-            for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ++)
+            for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
             {
                 // Generate a room width and length.
-                int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
-                int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
+                int width = rnd.Next(minRoomSize, maxRoomSize);
+                int length = rnd.Next(minRoomSize, maxRoomSize);
 
                 // Position the room within the grid location.
                 int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
@@ -102,17 +112,17 @@ public class GameModel : IGameModel
     private void GenerateRoomGraph()
     {
         // TODO: For now just create an edge between adjacent rooms.
-        for (int gridLocationX = 0; gridLocationX < levelDimensions; gridLocationX++)
+        for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
         {
-            for (int gridLocationZ = 0; gridLocationZ < levelDimensions - 1; gridLocationZ++)
+            for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
             {
                 roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX, gridLocationZ + 1]);
             }
         }
 
-        for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ++)
+        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
         {
-            for (int gridLocationX = 0; gridLocationX < levelDimensions - 1; gridLocationX++)
+            for (int gridLocationX = 0; gridLocationX < levelDimensionsX - 1; gridLocationX++)
             {
                 roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX + 1, gridLocationZ]);
             }
