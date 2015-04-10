@@ -23,6 +23,9 @@ public class DungeonLayoutView : IGameView
     /// </summary>
     public int Length { get; private set; }
 
+    /// <summary>
+    /// Represents the relationship between each of the rooms.
+    /// </summary>
     private IGraph<Room> roomGraph;
 
     [RecvMsgMethod]

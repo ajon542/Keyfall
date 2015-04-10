@@ -27,18 +27,19 @@ public class GameModel : IGameModel
     public int levelDimensions = 5;
 
     /// <summary>
-    /// Probability of generating a room.
-    /// </summary>
-    public int roomProbability = 100;
-
-    /// <summary>
     /// Split the level into a grid. A room can be placed in each grid location
     /// to ensure there is not room overlap.
     /// </summary>
     private int gridSize;
 
+    /// <summary>
+    /// Represents the relationship between each of the rooms.
+    /// </summary>
     private IGraph<Room> roomGraph;
 
+    /// <summary>
+    /// Represents the grid location of each of the rooms.
+    /// </summary>
     private Room[,] rooms;
 
     /// <summary>
@@ -77,19 +78,15 @@ public class GameModel : IGameModel
         {
             for (int gridLocationZ = 0; gridLocationZ < levelDimensions; gridLocationZ++)
             {
-                // Generate room based on a given percentage.
-                if (rnd.Next(100) < roomProbability)
-                {
-                    // Generate a room width and length.
-                    int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
-                    int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
+                // Generate a room width and length.
+                int width = rnd.Next(minRoomDimensions, maxRoomDimensions);
+                int length = rnd.Next(minRoomDimensions, maxRoomDimensions);
 
-                    // Position the room within the grid location.
-                    int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
-                    int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
+                // Position the room within the grid location.
+                int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
+                int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
 
-                    rooms[gridLocationX, gridLocationZ] = new Room(positionX, positionZ, width, length);
-                }
+                rooms[gridLocationX, gridLocationZ] = new Room(positionX, positionZ, width, length);
             }
         }
     }
