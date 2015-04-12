@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
 /// Concrete implementation of the IGameModel abstract base class.
@@ -73,6 +74,7 @@ public class GameModel : IGameModel
         dungeonLayout = new DungeonLayout[width, length];
 
         GenerateRoomLayout();
+        GenerateRoomConnections();
         GenerateRoomGraph();
 
         // Publish the floor plan message.
@@ -106,12 +108,59 @@ public class GameModel : IGameModel
                 Room room = new Room(positionX, positionZ, width, length);
                 rooms[gridLocationX, gridLocationZ] = room;
 
-                for(int i = positionX; i < positionX + width; ++i)
+                for (int i = positionX; i < positionX + width; ++i)
                 {
-                    for(int j = positionZ; j < positionZ + length; ++j)
+                    for (int j = positionZ; j < positionZ + length; ++j)
                     {
                         dungeonLayout[i, j] = DungeonLayout.Floor;
                     }
+                }
+            }
+        }
+    }
+
+    private void GenerateRoomConnections()
+    {
+        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
+        {
+            for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
+            {
+                Room top = rooms[gridLocationX, gridLocationZ+1];
+                Room bottom = rooms[gridLocationX, gridLocationZ];
+
+                int mid = top.PositionX + (top.Width / 2);
+                List<Vector2> path = new List<Vector2>();
+                FixedRoomConnection.Generate(
+                    RoomConnection.NorthSouth,
+                    new Vector2(mid, bottom.PositionZ + bottom.Length - 1),
+                    new Vector2(mid, top.PositionZ),
+                    path);
+
+                foreach (Vector2 pos in path)
+                {
+                    dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                }
+            }
+        }
+
+        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
+        {
+            for (int gridLocationX = 0; gridLocationX < levelDimensionsX - 1; gridLocationX++)
+            {
+                Room left = rooms[gridLocationX, gridLocationZ];
+                Room right = rooms[gridLocationX + 1, gridLocationZ];
+
+                int mid = left.PositionZ + (left.Length / 2);
+                List<Vector2> path = new List<Vector2>();
+                FixedRoomConnection.Generate(
+                    RoomConnection.EastWest,
+                    new Vector2(left.PositionX + left.Width - 1, mid),
+                    new Vector2(right.PositionX, mid),
+                    path);
+
+                foreach (Vector2 pos in path)
+                {
+                    dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
                 }
             }
         }
