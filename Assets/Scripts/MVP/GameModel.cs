@@ -47,6 +47,8 @@ public class GameModel : IGameModel
     /// </summary>
     private IGraph<Room> roomGraph;
 
+    private DungeonLayout[,] dungeonLayout;
+
     /// <summary>
     /// Represents the grid location of each of the rooms.
     /// </summary>
@@ -66,14 +68,19 @@ public class GameModel : IGameModel
         roomGraph = new RoomGraph<Room>();
         rooms = new Room[levelDimensionsX, levelDimensionsZ];
 
+        int width = levelDimensionsX * gridSize;
+        int length = levelDimensionsZ * gridSize;
+        dungeonLayout = new DungeonLayout[width, length];
+
         GenerateRoomLayout();
         GenerateRoomGraph();
 
         // Publish the floor plan message.
         FloorPlanMsg msg = new FloorPlanMsg();
         msg.RoomGraph = roomGraph;
-        msg.Width = levelDimensionsX * gridSize;
-        msg.Length = levelDimensionsZ * gridSize;
+        msg.DungeonLayout = dungeonLayout;
+        msg.Width = width;
+        msg.Length = length;
         presenter.PublishMsg(msg);
     }
 
@@ -96,7 +103,16 @@ public class GameModel : IGameModel
                 int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
                 int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
 
-                rooms[gridLocationX, gridLocationZ] = new Room(positionX, positionZ, width, length);
+                Room room = new Room(positionX, positionZ, width, length);
+                rooms[gridLocationX, gridLocationZ] = room;
+
+                for(int i = positionX; i < positionX + width; ++i)
+                {
+                    for(int j = positionZ; j < positionZ + length; ++j)
+                    {
+                        dungeonLayout[i, j] = DungeonLayout.Floor;
+                    }
+                }
             }
         }
     }

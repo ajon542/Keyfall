@@ -23,7 +23,9 @@ public class DungeonLayoutView : IGameView
     /// </summary>
     public int Length { get; private set; }
 
-    private GameObject Rooms { get; set; }
+    private GameObject RoomsGrid { get; set; }
+
+    private GameObject RoomsGraph { get; set; }
 
     /// <summary>
     /// Represents the relationship between each of the rooms.
@@ -42,17 +44,35 @@ public class DungeonLayoutView : IGameView
         List<Room> rooms = roomGraph.VertexList;
 
         // Create a root game object to hold all the rooms.
-        Rooms = new GameObject { name = "Rooms" };
+        RoomsGrid = new GameObject { name = "RoomsGrid" };
+
+        for(int i = 0; i < Width; ++i)
+        {
+            for(int j = 0;j < Length; ++j)
+            {
+                if(msg.DungeonLayout[i, j] == DungeonLayout.Floor)
+                {
+                    GameObject obj =
+                        Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
+                    obj.name = "FloorTile";
+                    obj.transform.parent = RoomsGrid.transform;
+                }
+            }
+        }
+
+        RoomsGraph = new GameObject { name = "RoomsGraph" };
         
         // Create the rooms based on the data sent from the model.
         foreach (Room room in rooms)
         {
             GameObject roomObj = new GameObject { name = "Room" };
-            roomObj.transform.parent = Rooms.transform;
+            roomObj.transform.parent = RoomsGraph.transform;
 
             GenerateFloor(roomObj, room);
-            GenerateWalls(roomObj, room);
+            //GenerateWalls(roomObj, room);
         }
+
+        //GenerateTunnels();
     }
 
     private void GenerateFloor(GameObject parent, Room room)
@@ -94,6 +114,27 @@ public class DungeonLayoutView : IGameView
                 = Instantiate(wall, new Vector3(room.PositionX + room.Width - 0.5f, 0.5f, room.PositionZ + i), Quaternion.Euler(0, 90, 0)) as GameObject;
             obj.name = "East Wall";
             obj.transform.parent = walls.transform;
+        }
+    }
+
+    private void GenerateTunnels()
+    {
+        List<Vector2> path = new List<Vector2>();
+        FixedRoomConnection.Generate(RoomConnection.NorthSouth, new Vector2(0, 0), new Vector2(0, 20), path);
+
+        foreach (Vector2 pos in path)
+        {
+            GameObject obj =
+                Instantiate(floorTile, new Vector3(pos.x, 0, pos.y), new Quaternion(1, 0, 0, 1)) as GameObject;
+        }
+
+        path = new List<Vector2>();
+        FixedRoomConnection.Generate(RoomConnection.EastWest, new Vector2(0, 0), new Vector2(20, 0), path);
+
+        foreach (Vector2 pos in path)
+        {
+            GameObject obj =
+                Instantiate(floorTile, new Vector3(pos.x, 0, pos.y), new Quaternion(1, 0, 0, 1)) as GameObject;
         }
     }
 
