@@ -36,7 +36,7 @@ public class DungeonLayoutView : IGameView
     public void HandleFloorPlanMsg(FloorPlanMsg msg)
     {
         Debug.Log("Received Floor Plan");
-
+        
         // Keep track of the floor plan properties.
         Width = msg.Width;
         Length = msg.Length;
