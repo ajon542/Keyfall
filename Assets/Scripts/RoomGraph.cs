@@ -16,7 +16,7 @@ public class RoomGraph<T> : IGraph<T>
     /// <param name="v2">The second vertex.</param>
     public void AddEdge(T v1, T v2)
     {
-        if (graph.ContainsKey(v1) && graph[v1].Contains(v2))
+        if (HasEdge(v1, v2))
         {
             // Edge between v1 and v2 already exists.
             return;
@@ -87,6 +87,17 @@ public class RoomGraph<T> : IGraph<T>
     public bool Contains(T vertex)
     {
         return graph.ContainsKey(vertex);
+    }
+
+    /// <summary>
+    /// Determines if an edge exists between the given vertices.
+    /// </summary>
+    /// <param name="v1">The first vertex.</param>
+    /// <param name="v2">The second vertex.</param>
+    /// <returns><c>true</c> if the graph contains the edge; otherwise, <c>false</c>.</returns>
+    public bool HasEdge(T v1, T v2)
+    {
+        return graph.ContainsKey(v1) && graph[v1].Contains(v2);
     }
 
     /// <summary>

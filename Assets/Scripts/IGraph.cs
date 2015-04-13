@@ -9,5 +9,6 @@ public interface IGraph<T>
     void AddEdge(T v1, T v2);
     void RemoveEdge(T v1, T v2);
     bool Contains(T vertex);
+    bool HasEdge(T v1, T v2);
     List<T> GetNeighbours(T vertex);
 }
