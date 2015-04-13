@@ -52,7 +52,7 @@ public enum RoomConnection
     NorthWest,
     EastSouth,
     EastWest,
-    EastNoth,
+    EastNorth,
     SouthWest
 }
 
@@ -67,6 +67,10 @@ public class FixedRoomConnection
         else if (type == RoomConnection.EastWest)
         {
             GenerateEastWest(start, end, result);
+        }
+        else if (type == RoomConnection.EastNorth)
+        {
+            GenerateEastNorth(start, end, result);
         }
     }
 
@@ -91,6 +95,48 @@ public class FixedRoomConnection
         int endX = (int)end.x;
 
         x++;
+        while (x < endX)
+        {
+            result.Add(new Vector2(x, y));
+            x++;
+        }
+    }
+
+    private static void GenerateEastNorth(Vector2 start, Vector2 end, List<Vector2> result)
+    {
+        int x = (int)start.x;
+        int y = (int)start.y;
+        int endX = (int)end.x;
+        int endY = (int)end.y;
+
+        x++;
+        while (x < endX)
+        {
+            result.Add(new Vector2(x, y));
+            x++;
+        }
+
+        while (y > endY)
+        {
+            result.Add(new Vector2(x, y));
+            y--;
+        }
+    }
+
+    private static void GenerateSouthWest(Vector2 start, Vector2 end, List<Vector2> result)
+    {
+        int x = (int)start.x;
+        int y = (int)start.y;
+        int endX = (int)end.x;
+        int endY = (int)end.y;
+
+        y--;
+        while (y > endY)
+        {
+            result.Add(new Vector2(x, y));
+            y--;
+        }
+
         while (x < endX)
         {
             result.Add(new Vector2(x, y));

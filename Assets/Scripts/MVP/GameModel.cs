@@ -88,6 +88,7 @@ public class GameModel : IGameModel
 
     /// <summary>
     /// Determine the positions, widths and lengths of all the rooms.
+    /// Mark the 2D array with the floor.
     /// </summary>
     private void GenerateRoomLayout()
     {
@@ -119,8 +120,14 @@ public class GameModel : IGameModel
         }
     }
 
+    /// <summary>
+    /// Connect the rooms together with flooring.
+    /// This is a vey basic algorithm that is bound to fail if the rooms are
+    /// too small. It serves as a basis only.
+    /// </summary>
     private void GenerateRoomConnections()
     {
+        // Make the North-South room connections.
         for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
         {
             for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
@@ -128,21 +135,46 @@ public class GameModel : IGameModel
                 Room top = rooms[gridLocationX, gridLocationZ+1];
                 Room bottom = rooms[gridLocationX, gridLocationZ];
 
+                // This deals with a straight connection between rooms.
+                // If the mid point of the room on the top lies between width of
+                // the room on the bottom, we can join them with a straight path.
                 int mid = top.PositionX + (top.Width / 2);
-                List<Vector2> path = new List<Vector2>();
-                FixedRoomConnection.Generate(
-                    RoomConnection.NorthSouth,
-                    new Vector2(mid, bottom.PositionZ + bottom.Length - 1),
-                    new Vector2(mid, top.PositionZ),
-                    path);
-
-                foreach (Vector2 pos in path)
+                if (mid >= bottom.PositionX && mid < bottom.PositionX + bottom.Width)
                 {
-                    dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                    List<Vector2> path = new List<Vector2>();
+                    FixedRoomConnection.Generate(
+                        RoomConnection.NorthSouth,
+                        new Vector2(mid, bottom.PositionZ + bottom.Length - 1),
+                        new Vector2(mid, top.PositionZ),
+                        path);
+
+                    foreach (Vector2 pos in path)
+                    {
+                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                    }
+                }
+                // This case the midpoint of the room on the top is left of the
+                // room on the bottom. We need to make an L-shape path. This path
+                // can be either an EastNorth or a SouthWest connection. For now,
+                // Lets just make it an SouthWest connection.
+                else if (mid < bottom.PositionX)
+                {
+                    List<Vector2> path = new List<Vector2>();
+                    FixedRoomConnection.Generate(
+                        RoomConnection.SouthWest,
+                        new Vector2(mid, top.PositionZ + top.Length),
+                        new Vector2(bottom.PositionX, bottom.PositionZ + (bottom.Length / 2)),
+                        path);
+
+                    foreach (Vector2 pos in path)
+                    {
+                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                    }
                 }
             }
         }
 
+        // Make the East-West room connections.
         for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
         {
             for (int gridLocationX = 0; gridLocationX < levelDimensionsX - 1; gridLocationX++)
@@ -151,16 +183,41 @@ public class GameModel : IGameModel
                 Room right = rooms[gridLocationX + 1, gridLocationZ];
 
                 int mid = left.PositionZ + (left.Length / 2);
-                List<Vector2> path = new List<Vector2>();
-                FixedRoomConnection.Generate(
-                    RoomConnection.EastWest,
-                    new Vector2(left.PositionX + left.Width - 1, mid),
-                    new Vector2(right.PositionX, mid),
-                    path);
 
-                foreach (Vector2 pos in path)
+                // This deals with a straight connection between rooms.
+                // If the mid point of the room on the left lies between length of
+                // the room on the right, we can join them with a straight path.
+                if (mid >= right.PositionZ && mid < right.PositionZ + right.Length)
                 {
-                    dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                    List<Vector2> path = new List<Vector2>();
+                    FixedRoomConnection.Generate(
+                        RoomConnection.EastWest,
+                        new Vector2(left.PositionX + left.Width - 1, mid),
+                        new Vector2(right.PositionX, mid),
+                        path);
+
+                    foreach (Vector2 pos in path)
+                    {
+                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                    }
+                }
+                // This case the midpoint of the room on the left is above the
+                // room on the right. We need to make an L-shape path. This path
+                // can be either a EastNorth or a SouthWest connection. For now,
+                // Lets just make it an EastNorth connection.
+                else if (mid >= right.PositionZ)
+                {
+                    List<Vector2> path = new List<Vector2>();
+                    FixedRoomConnection.Generate(
+                        RoomConnection.EastNorth,
+                        new Vector2(left.PositionX + left.Width - 1, mid),
+                        new Vector2(right.PositionX + (right.Width / 2), right.PositionZ),
+                        path);
+
+                    foreach (Vector2 pos in path)
+                    {
+                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
+                    }
                 }
             }
         }
