@@ -94,18 +94,8 @@ public class GameModel : IGameModel
     /// </summary>
     private void GenerateRoomLayout()
     {
-        IWeightedGraph<Location> grid = new DungeonGrid(levelDimensionsX * gridSize, levelDimensionsZ * gridSize);
-        PathFinder finder = new PathFinder(grid, new Location(0, 0), new Location(10, 10));
-
-        List<Location> path = finder.GetPath();
-
-        for (int i = 0; i < path.Count; ++i)
-        {
-            dungeonLayout[path[i].x, path[i].y] = DungeonLayout.Floor;
-        }
-
         // Generate a room in each grid location.
-        /*System.Random rnd = new System.Random();
+        System.Random rnd = new System.Random();
         for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
         {
             for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
@@ -129,7 +119,7 @@ public class GameModel : IGameModel
                     }
                 }
             }
-        }*/
+        }
     }
 
     /// <summary>
@@ -139,49 +129,29 @@ public class GameModel : IGameModel
     /// </summary>
     private void GenerateRoomConnections()
     {
+        IWeightedGraph<Location> grid = new DungeonGrid(levelDimensionsX * gridSize, levelDimensionsZ * gridSize);
+
         // Make the North-South room connections.
-        /*for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
+        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
         {
             for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
             {
-                Room top = rooms[gridLocationX, gridLocationZ+1];
+                Room top = rooms[gridLocationX, gridLocationZ + 1];
                 Room bottom = rooms[gridLocationX, gridLocationZ];
 
-                // This deals with a straight connection between rooms.
-                // If the mid point of the room on the top lies between width of
-                // the room on the bottom, we can join them with a straight path.
-                int mid = top.PositionX + (top.Width / 2);
-                if (mid >= bottom.PositionX && mid < bottom.PositionX + bottom.Width)
-                {
-                    List<Vector2> path = new List<Vector2>();
-                    FixedRoomConnection.Generate(
-                        RoomConnection.NorthSouth,
-                        new Vector2(mid, bottom.PositionZ + bottom.Length - 1),
-                        new Vector2(mid, top.PositionZ),
-                        path);
+                int midTop = top.PositionX + (top.Width/2);
+                int midBottom = bottom.PositionX + (bottom.Width / 2);
 
-                    foreach (Vector2 pos in path)
-                    {
-                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
-                    }
-                }
-                // This case the midpoint of the room on the top is left of the
-                // room on the bottom. We need to make an L-shape path. This path
-                // can be either an EastNorth or a SouthWest connection. For now,
-                // Lets just make it an SouthWest connection.
-                else if (mid < bottom.PositionX)
-                {
-                    List<Vector2> path = new List<Vector2>();
-                    FixedRoomConnection.Generate(
-                        RoomConnection.SouthWest,
-                        new Vector2(mid, top.PositionZ + top.Length),
-                        new Vector2(bottom.PositionX, bottom.PositionZ + (bottom.Length / 2)),
-                        path);
+                PathFinder finder = new PathFinder(
+                    grid,
+                    new Location(midBottom, bottom.PositionZ + bottom.Length - 1),
+                    new Location(midTop, top.PositionZ));
 
-                    foreach (Vector2 pos in path)
-                    {
-                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
-                    }
+                List<Location> path = finder.GetPath();
+
+                for (int i = 0; i < path.Count; ++i)
+                {
+                    dungeonLayout[path[i].x, path[i].y] = DungeonLayout.Floor;
                 }
             }
         }
@@ -194,45 +164,22 @@ public class GameModel : IGameModel
                 Room left = rooms[gridLocationX, gridLocationZ];
                 Room right = rooms[gridLocationX + 1, gridLocationZ];
 
-                int mid = left.PositionZ + (left.Length / 2);
+                int midLeft = left.PositionZ + (left.Length / 2);
+                int midRight = right.PositionZ + (right.Length / 2);
 
-                // This deals with a straight connection between rooms.
-                // If the mid point of the room on the left lies between length of
-                // the room on the right, we can join them with a straight path.
-                if (mid >= right.PositionZ && mid < right.PositionZ + right.Length)
+                PathFinder finder = new PathFinder(
+                    grid,
+                    new Location(left.PositionX + left.Width - 1, midLeft),
+                    new Location(right.PositionX, midRight));
+
+                List<Location> path = finder.GetPath();
+
+                for (int i = 0; i < path.Count; ++i)
                 {
-                    List<Vector2> path = new List<Vector2>();
-                    FixedRoomConnection.Generate(
-                        RoomConnection.EastWest,
-                        new Vector2(left.PositionX + left.Width - 1, mid),
-                        new Vector2(right.PositionX, mid),
-                        path);
-
-                    foreach (Vector2 pos in path)
-                    {
-                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
-                    }
-                }
-                // This case the midpoint of the room on the left is above the
-                // room on the right. We need to make an L-shape path. This path
-                // can be either a EastNorth or a SouthWest connection. For now,
-                // Lets just make it an EastNorth connection.
-                else if (mid >= right.PositionZ)
-                {
-                    List<Vector2> path = new List<Vector2>();
-                    FixedRoomConnection.Generate(
-                        RoomConnection.EastNorth,
-                        new Vector2(left.PositionX + left.Width - 1, mid),
-                        new Vector2(right.PositionX + (right.Width / 2), right.PositionZ),
-                        path);
-
-                    foreach (Vector2 pos in path)
-                    {
-                        dungeonLayout[(int)pos.x, (int)pos.y] = DungeonLayout.Floor;
-                    }
+                    dungeonLayout[path[i].x, path[i].y] = DungeonLayout.Floor;
                 }
             }
-        }*/
+        }
     }
 
     /// <summary>
