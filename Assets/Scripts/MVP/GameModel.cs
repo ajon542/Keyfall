@@ -57,6 +57,10 @@ public class GameModel : IGameModel
     /// </summary>
     private Room[,] rooms;
 
+    public int Width { get; private set; }
+    public int Length { get; private set; }
+
+
     /// <summary>
     /// Initialize the dungeon level.
     /// </summary>
@@ -68,29 +72,25 @@ public class GameModel : IGameModel
 
         // Initialize the floor plan.
         gridSize = maxRoomSize + roomSpread;
-        roomGraph = new RoomGraph<Room>();
         rooms = new Room[levelDimensionsX, levelDimensionsZ];
 
-        int width = levelDimensionsX * gridSize;
-        int length = levelDimensionsZ * gridSize;
-        dungeonLayout = new DungeonLayout[width, length];
+        Width = levelDimensionsX * gridSize;
+        Length = levelDimensionsZ * gridSize;
+        dungeonLayout = new DungeonLayout[Width, Length];
 
         GenerateRoomLayout();
         GenerateRoomConnections();
         GenerateRoomGraph();
 
-        // Publish the floor plan message.
-        FloorPlanMsg msg = new FloorPlanMsg();
-        msg.RoomGraph = roomGraph;
+        GenerateDungeon msg = new GenerateDungeon();
         msg.DungeonLayout = dungeonLayout;
-        msg.Width = width;
-        msg.Length = length;
+        msg.Width = Width;
+        msg.Length = Length;
         presenter.PublishMsg(msg);
     }
 
     /// <summary>
     /// Determine the positions, widths and lengths of all the rooms.
-    /// Mark the 2D array with the floor.
     /// </summary>
     private void GenerateRoomLayout()
     {
@@ -203,8 +203,31 @@ public class GameModel : IGameModel
         }*/
     }
 
+    private bool toggle = true;
+    private static float time = 0.0f;
+
     public override void UpdateModel()
     {
-        presenter.PublishMsg(new SampleMsg());
+        /*time += Time.deltaTime;
+        if (time > 1)
+        {
+            time = 0;
+
+            if (toggle)
+            {
+                GenerateDungeon msg = new GenerateDungeon();
+                msg.DungeonLayout = dungeonLayout;
+                msg.Width = Width;
+                msg.Length = Length;
+                presenter.PublishMsg(msg);
+            }
+            else
+            {
+                DestroyDungeon msg = new DestroyDungeon();
+                presenter.PublishMsg(msg);
+            }
+
+            toggle = !toggle;
+        }*/
     }
 }

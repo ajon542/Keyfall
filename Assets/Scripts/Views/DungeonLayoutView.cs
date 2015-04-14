@@ -25,23 +25,14 @@ public class DungeonLayoutView : IGameView
 
     private GameObject RoomsGrid { get; set; }
 
-    private GameObject RoomsGraph { get; set; }
-
-    /// <summary>
-    /// Represents the relationship between each of the rooms.
-    /// </summary>
-    private IGraph<Room> roomGraph;
-
     [RecvMsgMethod]
-    public void HandleFloorPlanMsg(FloorPlanMsg msg)
+    public void HandleGenerateDungeonMsg(GenerateDungeon msg)
     {
-        Debug.Log("Received Floor Plan");
+        Debug.Log("Received GenerateDungeonMsg");
         
         // Keep track of the floor plan properties.
         Width = msg.Width;
         Length = msg.Length;
-        roomGraph = msg.RoomGraph;
-        List<Room> rooms = roomGraph.VertexList;
 
         // Create a root game object to hold all the rooms.
         RoomsGrid = new GameObject { name = "RoomsGrid" };
@@ -59,36 +50,13 @@ public class DungeonLayoutView : IGameView
                 }
             }
         }
-
-        RoomsGraph = new GameObject { name = "RoomsGraph" };
-        
-        // Create the rooms based on the data sent from the model.
-        foreach (Room room in rooms)
-        {
-            GameObject roomObj = new GameObject { name = "Room" };
-            roomObj.transform.parent = RoomsGraph.transform;
-
-            GenerateFloor(roomObj, room);
-            //GenerateWalls(roomObj, room);
-        }
     }
 
-    private void GenerateFloor(GameObject parent, Room room)
+    [RecvMsgMethod]
+    public void HandleDestroyDungeonMsg(DestroyDungeon msg)
     {
-        GameObject floor = new GameObject { name = "Floor" };
-        floor.transform.parent = parent.transform;
-
-        for (int i = 0; i < room.Width; ++i)
-        {
-            for (int j = 0; j < room.Length; ++j)
-            {
-                // TODO: This should be delegated to a RoomView.
-                GameObject obj =
-                    Instantiate(floorTile, new Vector3(room.PositionX + i, 0, room.PositionZ + j), new Quaternion(1, 0, 0, 1)) as GameObject;
-                obj.name = "FloorTile";
-                obj.transform.parent = floor.transform;
-            }
-        }
+        Debug.Log("Received DestroyDungeonMsg");
+        Destroy(RoomsGrid);  
     }
 
     private void GenerateWalls(GameObject parent, Room room)
