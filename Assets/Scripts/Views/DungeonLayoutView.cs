@@ -36,9 +36,6 @@ public class DungeonLayoutView : IGameView
     public void HandleFloorPlanMsg(FloorPlanMsg msg)
     {
         Debug.Log("Received Floor Plan");
-
-        PathFinder finder = new PathFinder(new DungeonLayout[1, 1], 20, 20);
-        finder.GeneratePath(new Location(0, 0), new Location(10, 10), null);
         
         // Keep track of the floor plan properties.
         Width = msg.Width;

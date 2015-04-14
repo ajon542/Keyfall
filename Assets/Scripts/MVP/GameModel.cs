@@ -94,8 +94,18 @@ public class GameModel : IGameModel
     /// </summary>
     private void GenerateRoomLayout()
     {
+        IWeightedGraph<Location> grid = new DungeonGrid(levelDimensionsX * gridSize, levelDimensionsZ * gridSize);
+        PathFinder finder = new PathFinder(grid, new Location(0, 0), new Location(10, 10));
+
+        List<Location> path = finder.GetPath();
+
+        for (int i = 0; i < path.Count; ++i)
+        {
+            dungeonLayout[path[i].x, path[i].y] = DungeonLayout.Floor;
+        }
+
         // Generate a room in each grid location.
-        System.Random rnd = new System.Random();
+        /*System.Random rnd = new System.Random();
         for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
         {
             for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
@@ -119,7 +129,7 @@ public class GameModel : IGameModel
                     }
                 }
             }
-        }
+        }*/
     }
 
     /// <summary>
@@ -130,7 +140,7 @@ public class GameModel : IGameModel
     private void GenerateRoomConnections()
     {
         // Make the North-South room connections.
-        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
+        /*for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
         {
             for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
             {
@@ -222,7 +232,7 @@ public class GameModel : IGameModel
                     }
                 }
             }
-        }
+        }*/
     }
 
     /// <summary>
@@ -236,7 +246,7 @@ public class GameModel : IGameModel
     private void GenerateRoomGraph()
     {
         // TODO: For now just create an edge between adjacent rooms.
-        for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
+        /*for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
         {
             for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
             {
@@ -250,7 +260,7 @@ public class GameModel : IGameModel
             {
                 roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX + 1, gridLocationZ]);
             }
-        }
+        }*/
     }
 
     public override void UpdateModel()

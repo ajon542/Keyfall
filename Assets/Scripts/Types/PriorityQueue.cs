@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 // This is a basic implementation of a priority queue, nothing special.
 public class PriorityQueue<T>
