@@ -2,6 +2,6 @@
 
 public interface IWeightedGraph<L>
 {
-    int Cost(L a, L b);
+    int Cost(L id);
     IEnumerable<L> Neighbours(L id);
 }

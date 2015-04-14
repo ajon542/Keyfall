@@ -124,12 +124,11 @@ public class GameModel : IGameModel
 
     /// <summary>
     /// Connect the rooms together with flooring.
-    /// This is a vey basic algorithm that is bound to fail if the rooms are
-    /// too small. It serves as a basis only.
     /// </summary>
     private void GenerateRoomConnections()
     {
         IWeightedGraph<Location> grid = new DungeonGrid(levelDimensionsX * gridSize, levelDimensionsZ * gridSize);
+        PathFinder finder = new PathFinder(grid);
 
         // Make the North-South room connections.
         for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
@@ -142,12 +141,9 @@ public class GameModel : IGameModel
                 int midTop = top.PositionX + (top.Width/2);
                 int midBottom = bottom.PositionX + (bottom.Width / 2);
 
-                PathFinder finder = new PathFinder(
-                    grid,
+                List<Location> path = finder.GetPath(
                     new Location(midBottom, bottom.PositionZ + bottom.Length - 1),
                     new Location(midTop, top.PositionZ));
-
-                List<Location> path = finder.GetPath();
 
                 for (int i = 0; i < path.Count; ++i)
                 {
@@ -167,12 +163,9 @@ public class GameModel : IGameModel
                 int midLeft = left.PositionZ + (left.Length / 2);
                 int midRight = right.PositionZ + (right.Length / 2);
 
-                PathFinder finder = new PathFinder(
-                    grid,
+                List<Location> path = finder.GetPath(
                     new Location(left.PositionX + left.Width - 1, midLeft),
                     new Location(right.PositionX, midRight));
-
-                List<Location> path = finder.GetPath();
 
                 for (int i = 0; i < path.Count; ++i)
                 {

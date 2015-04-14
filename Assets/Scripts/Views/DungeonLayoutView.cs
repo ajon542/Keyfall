@@ -71,8 +71,6 @@ public class DungeonLayoutView : IGameView
             GenerateFloor(roomObj, room);
             //GenerateWalls(roomObj, room);
         }
-
-        //GenerateTunnels();
     }
 
     private void GenerateFloor(GameObject parent, Room room)
@@ -114,27 +112,6 @@ public class DungeonLayoutView : IGameView
                 = Instantiate(wall, new Vector3(room.PositionX + room.Width - 0.5f, 0.5f, room.PositionZ + i), Quaternion.Euler(0, 90, 0)) as GameObject;
             obj.name = "East Wall";
             obj.transform.parent = walls.transform;
-        }
-    }
-
-    private void GenerateTunnels()
-    {
-        List<Vector2> path = new List<Vector2>();
-        FixedRoomConnection.Generate(RoomConnection.NorthSouth, new Vector2(0, 0), new Vector2(0, 20), path);
-
-        foreach (Vector2 pos in path)
-        {
-            GameObject obj =
-                Instantiate(floorTile, new Vector3(pos.x, 0, pos.y), new Quaternion(1, 0, 0, 1)) as GameObject;
-        }
-
-        path = new List<Vector2>();
-        FixedRoomConnection.Generate(RoomConnection.EastWest, new Vector2(0, 0), new Vector2(20, 0), path);
-
-        foreach (Vector2 pos in path)
-        {
-            GameObject obj =
-                Instantiate(floorTile, new Vector3(pos.x, 0, pos.y), new Quaternion(1, 0, 0, 1)) as GameObject;
         }
     }
 
