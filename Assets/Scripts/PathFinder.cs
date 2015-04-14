@@ -34,11 +34,22 @@ public class PathFinder
         return dx + dy;
     }
 
+    // Diagonal distanct
     //private static int Heuristic(Location a, Location b)
     //{
     //    int dx = Math.Abs(a.x - b.x);
     //    int dy = Math.Abs(a.y - b.y);
     //    return Math.Max(dx, dy);
+    //}
+
+    // Euclidean distance
+    //private static int Heuristic(Location start, Location goal)
+    //{
+    //    int D = 5;
+    //
+    //    int dx = Math.Abs(start.x - goal.x);
+    //    int dy = Math.Abs(start.y - goal.y);
+    //    return D*(int)Math.Sqrt(dx*dx + dy*dy);
     //}
 
     /// <summary>
