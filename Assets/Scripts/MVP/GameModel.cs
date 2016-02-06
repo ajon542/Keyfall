@@ -60,6 +60,8 @@ public class GameModel : IGameModel
     public int Width { get; private set; }
     public int Length { get; private set; }
 
+    Player player;
+
 
     /// <summary>
     /// Initialize the dungeon level.
@@ -82,11 +84,15 @@ public class GameModel : IGameModel
         GenerateRoomConnections();
         GenerateRoomGraph();
 
-        GenerateDungeon msg = new GenerateDungeon();
-        msg.DungeonLayout = dungeonLayout;
-        msg.Width = Width;
-        msg.Length = Length;
-        presenter.PublishMsg(msg);
+        GenerateDungeon generateDungeon = new GenerateDungeon();
+        generateDungeon.DungeonLayout = dungeonLayout;
+        generateDungeon.Width = Width;
+        generateDungeon.Length = Length;
+        presenter.PublishMsg(generateDungeon);
+
+        PlayerPosition playerPosition = new PlayerPosition();
+        playerPosition.Position = player.Position;
+        presenter.PublishMsg(playerPosition);
     }
 
     /// <summary>
@@ -94,6 +100,8 @@ public class GameModel : IGameModel
     /// </summary>
     private void GenerateRoomLayout()
     {
+        bool playerCreated = false;
+
         // Generate a room in each grid location.
         System.Random rnd = new System.Random();
         for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
@@ -107,6 +115,13 @@ public class GameModel : IGameModel
                 // Position the room within the grid location.
                 int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
                 int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
+
+                if(playerCreated == false)
+                {
+                    playerCreated = true;
+                    player = new Player();
+                    player.Position = new Vector3(positionX + 0.5f, 3, positionZ + 0.5f);
+                }
 
                 Room room = new Room(positionX, positionZ, width, length);
                 rooms[gridLocationX, gridLocationZ] = room;

@@ -1,4 +1,4 @@
-﻿
+﻿using UnityEngine;
 /// <summary>
 /// The base class for all messages.
 /// </summary>
@@ -25,4 +25,9 @@ public class GenerateDungeon : BaseMsg
 public class DestroyDungeon : BaseMsg
 {
     
+}
+
+public class PlayerPosition : BaseMsg
+{
+    public Vector3 Position { get; set; }
 }
