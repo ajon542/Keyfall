@@ -3,14 +3,11 @@ using System.Collections;
 
 public class PlayerView : IGameView
 {
-    private Vector3 currentPosition = new Vector3(0.5f, 0.5f, 0.5f);
-
     [RecvMsgMethod]
     public void HandlePlayerPosition(PlayerPosition msg)
     {
-        currentPosition = msg.Position;
-
-        gameObject.transform.position = currentPosition;
+        gameObject.transform.position = new Vector3((float)msg.Position.x, 0.5f, (float)msg.Position.y);
+        Debug.Log(gameObject.transform.position);
     }
 
     public override void UpdateView()

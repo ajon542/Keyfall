@@ -29,5 +29,5 @@ public class DestroyDungeon : BaseMsg
 
 public class PlayerPosition : BaseMsg
 {
-    public Vector3 Position { get; set; }
+    public Location Position { get; set; }
 }

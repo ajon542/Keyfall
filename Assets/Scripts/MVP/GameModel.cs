@@ -48,7 +48,7 @@ public class GameModel : IGameModel
     /// <summary>
     /// Represents the relationship between each of the rooms.
     /// </summary>
-    private IGraph<Room> roomGraph;
+    //private IGraph<Room> roomGraph;
 
     private DungeonLayout[,] dungeonLayout;
 
@@ -119,7 +119,7 @@ public class GameModel : IGameModel
                 {
                     playerCreated = true;
                     player = new Player();
-                    player.Position = new Vector3(0, 0.5f, 0);
+                    player.Position = new Location(positionX, positionZ);
                 }
 
                 Room room = new Room(positionX, positionZ, width, length);
@@ -217,16 +217,26 @@ public class GameModel : IGameModel
         }*/
     }
 
-    private bool toggle = true;
-    private static float time = 0.0f;
-
-    private void UpdatePlayerPosition(Vector3 position)
+    /// <summary>
+    /// Update the players position and send the result to the player view if valid.
+    /// </summary>
+    /// <param name="location">The new player location</param>
+    private void UpdatePlayerPosition(Location location)
     {
-        player.Position = new Vector3(
-            player.Position.x + position.x,
-            player.Position.y + position.y,
-            player.Position.z + position.z);
+        Location newPosition = new Location(
+            player.Position.x + location.x,
+            player.Position.y + location.y);
 
+        // Prevent the player from stepping off the dungeon floor.
+        if (dungeonLayout[newPosition.x, newPosition.y] != DungeonLayout.Floor)
+        {
+            return;
+        }
+
+        // Update the player position.
+        player.Position = newPosition;
+
+        // Send the updated position to the view.
         PlayerPosition playerPosition = new PlayerPosition();
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
@@ -236,19 +246,19 @@ public class GameModel : IGameModel
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            UpdatePlayerPosition(new Vector3(0, 0, 1));
+            UpdatePlayerPosition(new Location(0, 1));
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            UpdatePlayerPosition(new Vector3(0, 0, -1));
+            UpdatePlayerPosition(new Location(0, -1));
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
-            UpdatePlayerPosition(new Vector3(-1, 0, 0));
+            UpdatePlayerPosition(new Location(-1, 0));
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
-            UpdatePlayerPosition(new Vector3(1, 0, 0));
+            UpdatePlayerPosition(new Location(1, 0));
         }
     }
 }

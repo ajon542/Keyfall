@@ -3,5 +3,5 @@ using UnityEngine;
 
 public class Player
 {
-    public Vector3 Position { get; set; }
+    public Location Position { get; set; }
 }
