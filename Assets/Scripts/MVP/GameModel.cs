@@ -242,21 +242,30 @@ public class GameModel : IGameModel
         presenter.PublishMsg(playerPosition);
     }
 
+    private float gameSpeed = 0;
     public override void UpdateModel()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        // TODO: This is sufficient for now, but need to make the camera movement smoother.
+        gameSpeed += Time.deltaTime;
+        if(gameSpeed < 0.1f)
+        {
+            return;
+        }
+        gameSpeed = 0;
+
+        if (Input.GetKey(KeyCode.W))
         {
             UpdatePlayerPosition(new Location(0, 1));
         }
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
             UpdatePlayerPosition(new Location(0, -1));
         }
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             UpdatePlayerPosition(new Location(-1, 0));
         }
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             UpdatePlayerPosition(new Location(1, 0));
         }
