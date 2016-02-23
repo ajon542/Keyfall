@@ -20,3 +20,9 @@ public enum DungeonLayout
     Door,
     Stairs
 }
+
+public enum TownLayout
+{
+    Unknown,
+    Floor,
+}
