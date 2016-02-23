@@ -221,28 +221,35 @@ public class GameModel : IGameModel
     private bool toggle = true;
     private static float time = 0.0f;
 
+    private void UpdatePlayerPosition(Vector3 position)
+    {
+        player.Position = new Vector3(
+            player.Position.x + position.x,
+            player.Position.y + position.y,
+            player.Position.z + position.z);
+
+        PlayerPosition playerPosition = new PlayerPosition();
+        playerPosition.Position = player.Position;
+        presenter.PublishMsg(playerPosition);
+    }
+
     public override void UpdateModel()
     {
-        /*time += Time.deltaTime;
-        if (time > 1)
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            time = 0;
-
-            if (toggle)
-            {
-                GenerateDungeon msg = new GenerateDungeon();
-                msg.DungeonLayout = dungeonLayout;
-                msg.Width = Width;
-                msg.Length = Length;
-                presenter.PublishMsg(msg);
-            }
-            else
-            {
-                DestroyDungeon msg = new DestroyDungeon();
-                presenter.PublishMsg(msg);
-            }
-
-            toggle = !toggle;
-        }*/
+            UpdatePlayerPosition(new Vector3(0, 0, 1));
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            UpdatePlayerPosition(new Vector3(0, 0, -1));
+        }
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            UpdatePlayerPosition(new Vector3(-1, 0, 0));
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            UpdatePlayerPosition(new Vector3(1, 0, 0));
+        }
     }
 }

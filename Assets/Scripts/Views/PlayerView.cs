@@ -16,29 +16,6 @@ public class PlayerView : IGameView
 
     public override void UpdateView()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x, 0.5f, currentPosition.z + 1);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x, 0.5f, currentPosition.z - 1);
-        }
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x - 1, 0.5f, currentPosition.z);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x + 1, 0.5f, currentPosition.z);
-        }
-
-        gameObject.transform.position = currentPosition;
-
         base.UpdateView();
     }
 }
