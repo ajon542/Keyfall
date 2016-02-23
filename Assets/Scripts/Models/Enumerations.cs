@@ -21,6 +21,30 @@ public enum DungeonLayout
     Stairs
 }
 
+public enum StructuralItems
+{
+    Unknown,
+    FloorConcrete,
+    FloorRock,
+    FloorClay,
+    FloorMud,
+    FloorSlime,
+    FloorWood,
+
+    // There is only north and east walls as the others will not be visible.
+    WallConcreteNorth,
+    WallRockNorth,
+    WallSlimeNorth,
+    WallConcreteEast,
+    WallRockEast,
+    WallSlimeEast,
+
+    DoorNorth,
+    DoorSouth,
+    DoorEast,
+    DoorWest,
+}
+
 public enum TownLayout
 {
     Unknown,
