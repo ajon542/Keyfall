@@ -49,3 +49,4 @@ Temp
 *.csproj
 *.sln
 *.DotSettings
+*.suo
