@@ -8,7 +8,6 @@ public class PlayerView : IGameView
     [RecvMsgMethod]
     public void HandlePlayerPosition(PlayerPosition msg)
     {
-        Debug.Log("HandlePlayerPosition");
         currentPosition = msg.Position;
 
         gameObject.transform.position = currentPosition;

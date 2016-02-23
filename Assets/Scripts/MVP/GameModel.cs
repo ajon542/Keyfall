@@ -60,8 +60,7 @@ public class GameModel : IGameModel
     public int Width { get; private set; }
     public int Length { get; private set; }
 
-    Player player;
-
+    private Player player;
 
     /// <summary>
     /// Initialize the dungeon level.
@@ -116,7 +115,7 @@ public class GameModel : IGameModel
                 int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
                 int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
 
-                if(playerCreated == false)
+                if (playerCreated == false)
                 {
                     playerCreated = true;
                     player = new Player();
@@ -153,7 +152,7 @@ public class GameModel : IGameModel
                 Room top = rooms[gridLocationX, gridLocationZ + 1];
                 Room bottom = rooms[gridLocationX, gridLocationZ];
 
-                int midTop = top.PositionX + (top.Width/2);
+                int midTop = top.PositionX + (top.Width / 2);
                 int midBottom = bottom.PositionX + (bottom.Width / 2);
 
                 List<Location> path = finder.GetPath(

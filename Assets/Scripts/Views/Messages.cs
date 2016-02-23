@@ -24,7 +24,7 @@ public class GenerateDungeon : BaseMsg
 
 public class DestroyDungeon : BaseMsg
 {
-    
+
 }
 
 public class PlayerPosition : BaseMsg

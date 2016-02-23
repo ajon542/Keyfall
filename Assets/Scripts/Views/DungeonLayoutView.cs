@@ -29,7 +29,7 @@ public class DungeonLayoutView : IGameView
     public void HandleGenerateDungeonMsg(GenerateDungeon msg)
     {
         Debug.Log("Received GenerateDungeonMsg");
-        
+
         // Keep track of the floor plan properties.
         Width = msg.Width;
         Length = msg.Length;
@@ -37,11 +37,11 @@ public class DungeonLayoutView : IGameView
         // Create a root game object to hold all the rooms.
         RoomsGrid = new GameObject { name = "RoomsGrid" };
 
-        for(int i = 0; i < Width; ++i)
+        for (int i = 0; i < Width; ++i)
         {
-            for(int j = 0;j < Length; ++j)
+            for (int j = 0; j < Length; ++j)
             {
-                if(msg.DungeonLayout[i, j] == DungeonLayout.Floor)
+                if (msg.DungeonLayout[i, j] == DungeonLayout.Floor)
                 {
                     GameObject obj =
                         Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
@@ -56,7 +56,7 @@ public class DungeonLayoutView : IGameView
     public void HandleDestroyDungeonMsg(DestroyDungeon msg)
     {
         Debug.Log("Received DestroyDungeonMsg");
-        Destroy(RoomsGrid);  
+        Destroy(RoomsGrid);
     }
 
     private void GenerateWalls(GameObject parent, Room room)
