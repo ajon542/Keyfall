@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerView : IGameView
 {
-    private Vector3 currentPosition;
+    private Vector3 currentPosition = new Vector3(0.5f, 0.5f, 0.5f);
 
     [RecvMsgMethod]
     public void HandlePlayerPosition(PlayerPosition msg)
@@ -19,22 +19,22 @@ public class PlayerView : IGameView
         if (Input.GetKeyDown(KeyCode.W))
         {
             // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x, 0, currentPosition.z + 1);
+            currentPosition = new Vector3(currentPosition.x, 0.5f, currentPosition.z + 1);
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x, 0, currentPosition.z - 1);
+            currentPosition = new Vector3(currentPosition.x, 0.5f, currentPosition.z - 1);
         }
         if (Input.GetKeyDown(KeyCode.A))
         {
             // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x - 1, 0, currentPosition.z);
+            currentPosition = new Vector3(currentPosition.x - 1, 0.5f, currentPosition.z);
         }
         if (Input.GetKeyDown(KeyCode.D))
         {
             // TODO: Need a way to update the model with the information.
-            currentPosition = new Vector3(currentPosition.x + 1, 0, currentPosition.z);
+            currentPosition = new Vector3(currentPosition.x + 1, 0.5f, currentPosition.z);
         }
 
         gameObject.transform.position = currentPosition;

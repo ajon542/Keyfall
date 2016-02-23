@@ -120,7 +120,7 @@ public class GameModel : IGameModel
                 {
                     playerCreated = true;
                     player = new Player();
-                    player.Position = new Vector3(positionX + 0.5f, 3, positionZ + 0.5f);
+                    player.Position = new Vector3(0, 0.5f, 0);
                 }
 
                 Room room = new Room(positionX, positionZ, width, length);
