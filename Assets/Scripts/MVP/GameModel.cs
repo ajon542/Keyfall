@@ -29,20 +29,11 @@ public class GameModel : IGameModel
         // Let the base class do its thing.
         base.Initialize(presenter);
 
-        // TODO: Clean the variables up.
-        int maxRoomSize = 10;
-        int roomSpread = 3;
-        int gridSize = maxRoomSize + roomSpread;
-        Width = gridSize * 5;
-        Length = gridSize * 5;
-
-        ILevelGenerator townGenerator = new Dungeon(gridSize, 5, 5);
-        townLayout = townGenerator.GenerateLevel(Width, Length);
+        ILevelGenerator townGenerator = new Dungeon();
+        townLayout = townGenerator.GenerateLevel(5, 15);
 
         GenerateDungeon generateDungeon = new GenerateDungeon();
         generateDungeon.DungeonLayout = townLayout;
-        generateDungeon.Width = Width;
-        generateDungeon.Length = Length;
         presenter.PublishMsg(generateDungeon);
 
         //GenerateTown generateTown = new GenerateTown();

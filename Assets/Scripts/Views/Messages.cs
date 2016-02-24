@@ -18,17 +18,11 @@ public class RoomMsg : BaseMsg
 public class GenerateDungeon : BaseMsg
 {
     public List<TownLayout>[,] DungeonLayout { get; set; }
-
-    public int Width { get; set; }
-    public int Length { get; set; }
 }
 
 public class GenerateTown : BaseMsg
 {
     public List<TownLayout>[,] TownLayout { get; set; }
-
-    public int Width { get; set; }
-    public int Length { get; set; }
 }
 
 public class DestroyDungeon : BaseMsg

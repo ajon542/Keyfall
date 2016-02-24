@@ -16,27 +16,21 @@ public class Dungeon : ILevelGenerator
     /// Represents the grid location of each of the rooms.
     /// </summary>
     private Room[,] rooms;
-    int gridSize;
-    int levelDimensionsX;
-    int levelDimensionsZ;
-    int minRoomSize = 3;
-    int maxRoomSize = 10;
-
-    public Dungeon(int gridSize, int levelDimensionsX, int levelDimensionsZ)
-    {
-        this.levelDimensionsX = levelDimensionsX;
-        this.levelDimensionsZ = levelDimensionsZ;
-        this.gridSize = gridSize;
-        rooms = new Room[levelDimensionsX, levelDimensionsZ];
-    }
+    private int levelDimensionsX = 5;
+    private int levelDimensionsZ = 5;
+    private int minRoomSize = 3;
+    private int maxRoomSize = 10;
+    private int gridSize = 13;
 
     public List<TownLayout>[,] GenerateLevel(int width, int length)
     {
-        townLayout = new List<TownLayout>[width, length];
+        levelDimensionsX = width;
+        levelDimensionsZ = length;
+        rooms = new Room[levelDimensionsX, levelDimensionsZ];
+        townLayout = new List<TownLayout>[width * gridSize, length * gridSize];
 
         GenerateRoomLayout();
         GenerateRoomConnections();
-        //GenerateRoomGraph();
 
         return townLayout;
     }
@@ -128,33 +122,5 @@ public class Dungeon : ILevelGenerator
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// Create the room graph.
-    /// </summary>
-    /// <remarks>
-    /// In general, a room may be connected to another room in an adjacent gridLocation.
-    /// For example a room in grid location 0,0 may be connected to a room in 0,1 and 1,0.
-    /// A room must have at least one connection.
-    /// </remarks>
-    private void GenerateRoomGraph()
-    {
-        // TODO: For now just create an edge between adjacent rooms.
-        /*for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
-        {
-            for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
-            {
-                roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX, gridLocationZ + 1]);
-            }
-        }
-
-        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
-        {
-            for (int gridLocationX = 0; gridLocationX < levelDimensionsX - 1; gridLocationX++)
-            {
-                roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX + 1, gridLocationZ]);
-            }
-        }*/
     }
 }

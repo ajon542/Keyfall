@@ -3,50 +3,10 @@ using UnityEngine;
 
 public class DungeonLayoutView : IGameView
 {
-    /// <summary>
-    /// Minimum room width and length.
-    /// </summary>
-    public int minRoomSize = 3;
-
-    /// <summary>
-    /// Maximum room width and length.
-    /// </summary>
-    public int maxRoomSize = 10;
-
-    /// <summary>
-    /// Average distance between the rooms.
-    /// </summary>
-    public int roomSpread = 3;
-
-    // TODO: Level dimensions of 1,1 do not work.
-    /// <summary>
-    /// The level dimensions.
-    /// </summary>
-    public int levelDimensionsX = 5;
-
-    /// <summary>
-    /// The level dimensions.
-    /// </summary>
-    public int levelDimensionsZ = 5;
-
-    /// <summary>
-    /// The prefab used for the floor.
-    /// </summary>
     public GameObject floorTile;
-
-    /// <summary>
-    /// The prefab used for the wall.
-    /// </summary>
     public GameObject wall;
 
-    /// <summary>
-    /// Gets the width of the room.
-    /// </summary>
     public int Width { get; private set; }
-
-    /// <summary>
-    /// Gets the length of the room.
-    /// </summary>
     public int Length { get; private set; }
 
     private GameObject RoomsGrid { get; set; }
@@ -57,8 +17,8 @@ public class DungeonLayoutView : IGameView
         Debug.Log("Received GenerateDungeonMsg");
 
         // Keep track of the floor plan properties.
-        Width = msg.Width;
-        Length = msg.Length;
+        Width = msg.DungeonLayout.GetLength(0);
+        Length = msg.DungeonLayout.GetLength(1);
 
         // Create a root game object to hold all the rooms.
         RoomsGrid = new GameObject { name = "RoomsGrid" };

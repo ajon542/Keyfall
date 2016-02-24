@@ -31,8 +31,8 @@ public class TownLayoutView : IGameView
         Debug.Log("Received GenerateTownMsg");
 
         // Keep track of the floor plan properties.
-        Width = msg.Width;
-        Length = msg.Length;
+        Width = msg.TownLayout.GetLength(0);
+        Length = msg.TownLayout.GetLength(1);
 
         // Create a root game object to hold all the rooms.
         RoomsGrid = new GameObject { name = "RoomsGrid" };
