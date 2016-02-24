@@ -13,7 +13,7 @@ public class GameModel : IGameModel
     /// </summary>
     //private IGraph<Room> roomGraph;
 
-    private List<TownLayout>[,] townLayout;
+    private List<string>[,] townLayout;
 
     public int Width { get; private set; }
     public int Length { get; private set; }

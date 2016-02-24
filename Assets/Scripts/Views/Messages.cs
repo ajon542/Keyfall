@@ -17,12 +17,12 @@ public class RoomMsg : BaseMsg
 
 public class GenerateDungeon : BaseMsg
 {
-    public List<TownLayout>[,] DungeonLayout { get; set; }
+    public List<string>[,] DungeonLayout { get; set; }
 }
 
 public class GenerateTown : BaseMsg
 {
-    public List<TownLayout>[,] TownLayout { get; set; }
+    public List<string>[,] TownLayout { get; set; }
 }
 
 public class DestroyDungeon : BaseMsg

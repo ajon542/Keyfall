@@ -6,6 +6,8 @@ public class DungeonLayoutView : IGameView
     public GameObject floorTile;
     public GameObject wall;
 
+    public List<GameObject> prefabs;
+
     public int Width { get; private set; }
     public int Length { get; private set; }
 
@@ -27,7 +29,7 @@ public class DungeonLayoutView : IGameView
         {
             for (int j = 0; j < Length; ++j)
             {
-                if (msg.DungeonLayout[i, j] != null && msg.DungeonLayout[i, j].Count > 0 && msg.DungeonLayout[i, j][0] == TownLayout.Floor)
+                if (msg.DungeonLayout[i, j] != null && msg.DungeonLayout[i, j].Count > 0 && msg.DungeonLayout[i, j][0] == "Floor")
                 {
                     GameObject obj =
                         Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;

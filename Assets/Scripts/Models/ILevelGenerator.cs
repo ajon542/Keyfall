@@ -4,5 +4,5 @@ using System.Collections.Generic;
 
 public interface ILevelGenerator
 {
-    List<TownLayout>[,] GenerateLevel(int width, int length);
+    List<string>[,] GenerateLevel(int width, int length);
 }

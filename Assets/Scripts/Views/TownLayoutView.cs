@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class TownLayoutView : IGameView
 {
@@ -12,6 +12,8 @@ public class TownLayoutView : IGameView
     /// The prefab used for the wall.
     /// </summary>
     public GameObject wall;
+
+    public List<GameObject> prefabs;
 
     private GameObject RoomsGrid { get; set; }
 
@@ -41,7 +43,7 @@ public class TownLayoutView : IGameView
         {
             for (int j = 0; j < Length; ++j)
             {
-                if (msg.TownLayout[i, j][0] == TownLayout.Floor)
+                if (msg.TownLayout[i, j][0] == "Floor")
                 {
                     GameObject obj =
                         Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;

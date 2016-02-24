@@ -37,9 +37,3 @@ public enum StructuralItems
     StairsEast,
     StairsWest,
 }
-
-public enum TownLayout
-{
-    Unknown,
-    Floor,
-}

@@ -2,15 +2,7 @@
 
 public class Dungeon : ILevelGenerator
 {
-    // House - storage of items
-    // General Store - food, water, torches, medical supplies
-    // Armour - legs, body, arms, helmets, boots
-    // Weapons - swords, daggers, spears, axes
-    // Magic / Alchemy - potions, spells, wands, teleportation devices
-    // Library - books for learning about various things
-    // Black market - rare items, rings, amulets
-
-    private List<TownLayout>[,] townLayout;
+    private List<string>[,] townLayout;
 
     /// <summary>
     /// Represents the grid location of each of the rooms.
@@ -22,12 +14,12 @@ public class Dungeon : ILevelGenerator
     private int maxRoomSize = 10;
     private int gridSize = 13;
 
-    public List<TownLayout>[,] GenerateLevel(int width, int length)
+    public List<string>[,] GenerateLevel(int width, int length)
     {
         levelDimensionsX = width;
         levelDimensionsZ = length;
         rooms = new Room[levelDimensionsX, levelDimensionsZ];
-        townLayout = new List<TownLayout>[width * gridSize, length * gridSize];
+        townLayout = new List<string>[width * gridSize, length * gridSize];
 
         GenerateRoomLayout();
         GenerateRoomConnections();
@@ -61,8 +53,8 @@ public class Dungeon : ILevelGenerator
                 {
                     for (int j = positionZ; j < positionZ + length; ++j)
                     {
-                        townLayout[i, j] = new List<TownLayout>();
-                        townLayout[i, j].Add(TownLayout.Floor);
+                        townLayout[i, j] = new List<string>();
+                        townLayout[i, j].Add("Floor");
                     }
                 }
             }
@@ -94,8 +86,8 @@ public class Dungeon : ILevelGenerator
 
                 for (int i = 0; i < path.Count; ++i)
                 {
-                    townLayout[path[i].x, path[i].y] = new List<TownLayout>();
-                    townLayout[path[i].x, path[i].y].Add(TownLayout.Floor);
+                    townLayout[path[i].x, path[i].y] = new List<string>();
+                    townLayout[path[i].x, path[i].y].Add("Floor");
                 }
             }
         }
@@ -117,8 +109,8 @@ public class Dungeon : ILevelGenerator
 
                 for (int i = 0; i < path.Count; ++i)
                 {
-                    townLayout[path[i].x, path[i].y] = new List<TownLayout>();
-                    townLayout[path[i].x, path[i].y].Add(TownLayout.Floor);
+                    townLayout[path[i].x, path[i].y] = new List<string>();
+                    townLayout[path[i].x, path[i].y].Add("Floor");
                 }
             }
         }
