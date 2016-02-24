@@ -9,53 +9,11 @@ using System.Collections.Generic;
 public class GameModel : IGameModel
 {
     /// <summary>
-    /// Minimum room width and length.
-    /// </summary>
-    [Tooltip("Minimum room width and length.")]
-    public int minRoomSize = 3;
-
-    /// <summary>
-    /// Maximum room width and length.
-    /// </summary>
-    [Tooltip("Maximum room width and length.")]
-    public int maxRoomSize = 15;
-
-    /// <summary>
-    /// Average distance between the rooms.
-    /// </summary>
-    [Tooltip("Average distance between the rooms.")]
-    public int roomSpread = 3;
-
-    // TODO: Level dimensions of 1,1 do not work.
-    /// <summary>
-    /// The level dimensions.
-    /// </summary>
-    [Tooltip("Number of rooms in the x-direction.")]
-    public int levelDimensionsX = 5;
-
-    /// <summary>
-    /// The level dimensions.
-    /// </summary>
-    [Tooltip("Number of rooms in the z-direction.")]
-    public int levelDimensionsZ = 5;
-
-    /// <summary>
-    /// Split the level into a grid. A room can be placed in each grid location
-    /// to ensure there is not room overlap.
-    /// </summary>
-    private int gridSize;
-
-    /// <summary>
     /// Represents the relationship between each of the rooms.
     /// </summary>
     //private IGraph<Room> roomGraph;
 
-    private DungeonLayout[,] dungeonLayout;
-
-    /// <summary>
-    /// Represents the grid location of each of the rooms.
-    /// </summary>
-    private Room[,] rooms;
+    private List<TownLayout>[,] townLayout;
 
     public int Width { get; private set; }
     public int Length { get; private set; }
@@ -71,150 +29,36 @@ public class GameModel : IGameModel
         // Let the base class do its thing.
         base.Initialize(presenter);
 
-        // Initialize the floor plan.
-        gridSize = maxRoomSize + roomSpread;
-        rooms = new Room[levelDimensionsX, levelDimensionsZ];
+        int minRoomSize = 3;
+        int maxRoomSize = 10;
+        int roomSpread = 3;
+        int gridSize = maxRoomSize + roomSpread;
+        Width = gridSize * 5;
+        Length = gridSize * 5;
 
-        Width = levelDimensionsX * gridSize;
-        Length = levelDimensionsZ * gridSize;
-        dungeonLayout = new DungeonLayout[Width, Length];
+        ILevelGenerator townGenerator = new Dungeon(gridSize, 5, 5);
+        townLayout = townGenerator.GenerateLevel(Width, Length);
 
-        GenerateRoomLayout();
-        GenerateRoomConnections();
-        GenerateRoomGraph();
+        int width = townLayout.GetLength(0);
+        int height = townLayout.GetLength(1);
 
         GenerateDungeon generateDungeon = new GenerateDungeon();
-        generateDungeon.DungeonLayout = dungeonLayout;
+        generateDungeon.DungeonLayout = townLayout;
         generateDungeon.Width = Width;
         generateDungeon.Length = Length;
         presenter.PublishMsg(generateDungeon);
 
+        //GenerateTown generateTown = new GenerateTown();
+        //generateTown.TownLayout = townLayout;
+        //generateTown.Width = Width;
+        //generateTown.Length = Length;
+        //presenter.PublishMsg(generateTown);
+
+        player = new Player();
+        player.Position = new Location(0, 0);
         PlayerPosition playerPosition = new PlayerPosition();
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
-    }
-
-    /// <summary>
-    /// Determine the positions, widths and lengths of all the rooms.
-    /// </summary>
-    private void GenerateRoomLayout()
-    {
-        bool playerCreated = false;
-
-        // Generate a room in each grid location.
-        System.Random rnd = new System.Random();
-        for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
-        {
-            for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
-            {
-                // Generate a room width and length.
-                int width = rnd.Next(minRoomSize, maxRoomSize);
-                int length = rnd.Next(minRoomSize, maxRoomSize);
-
-                // Position the room within the grid location.
-                int positionX = rnd.Next(0, gridSize - width) + gridLocationX * gridSize;
-                int positionZ = rnd.Next(0, gridSize - length) + gridLocationZ * gridSize;
-
-                if (playerCreated == false)
-                {
-                    playerCreated = true;
-                    player = new Player();
-                    player.Position = new Location(positionX, positionZ);
-                }
-
-                Room room = new Room(positionX, positionZ, width, length);
-                rooms[gridLocationX, gridLocationZ] = room;
-
-                for (int i = positionX; i < positionX + width; ++i)
-                {
-                    for (int j = positionZ; j < positionZ + length; ++j)
-                    {
-                        dungeonLayout[i, j] = DungeonLayout.Floor;
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Connect the rooms together with flooring.
-    /// </summary>
-    private void GenerateRoomConnections()
-    {
-        IWeightedGraph<Location> grid = new DungeonGrid(levelDimensionsX * gridSize, levelDimensionsZ * gridSize);
-        PathFinder finder = new PathFinder(grid);
-
-        // Make the North-South room connections.
-        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
-        {
-            for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
-            {
-                Room top = rooms[gridLocationX, gridLocationZ + 1];
-                Room bottom = rooms[gridLocationX, gridLocationZ];
-
-                int midTop = top.PositionX + (top.Width / 2);
-                int midBottom = bottom.PositionX + (bottom.Width / 2);
-
-                List<Location> path = finder.GetPath(
-                    new Location(midBottom, bottom.PositionZ + bottom.Length - 1),
-                    new Location(midTop, top.PositionZ));
-
-                for (int i = 0; i < path.Count; ++i)
-                {
-                    dungeonLayout[path[i].x, path[i].y] = DungeonLayout.Floor;
-                }
-            }
-        }
-
-        // Make the East-West room connections.
-        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
-        {
-            for (int gridLocationX = 0; gridLocationX < levelDimensionsX - 1; gridLocationX++)
-            {
-                Room left = rooms[gridLocationX, gridLocationZ];
-                Room right = rooms[gridLocationX + 1, gridLocationZ];
-
-                int midLeft = left.PositionZ + (left.Length / 2);
-                int midRight = right.PositionZ + (right.Length / 2);
-
-                List<Location> path = finder.GetPath(
-                    new Location(left.PositionX + left.Width - 1, midLeft),
-                    new Location(right.PositionX, midRight));
-
-                for (int i = 0; i < path.Count; ++i)
-                {
-                    dungeonLayout[path[i].x, path[i].y] = DungeonLayout.Floor;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Create the room graph.
-    /// </summary>
-    /// <remarks>
-    /// In general, a room may be connected to another room in an adjacent gridLocation.
-    /// For example a room in grid location 0,0 may be connected to a room in 0,1 and 1,0.
-    /// A room must have at least one connection.
-    /// </remarks>
-    private void GenerateRoomGraph()
-    {
-        // TODO: For now just create an edge between adjacent rooms.
-        /*for (int gridLocationX = 0; gridLocationX < levelDimensionsX; gridLocationX++)
-        {
-            for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ - 1; gridLocationZ++)
-            {
-                roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX, gridLocationZ + 1]);
-            }
-        }
-
-        for (int gridLocationZ = 0; gridLocationZ < levelDimensionsZ; gridLocationZ++)
-        {
-            for (int gridLocationX = 0; gridLocationX < levelDimensionsX - 1; gridLocationX++)
-            {
-                roomGraph.AddEdge(rooms[gridLocationX, gridLocationZ], rooms[gridLocationX + 1, gridLocationZ]);
-            }
-        }*/
     }
 
     /// <summary>
@@ -228,10 +72,11 @@ public class GameModel : IGameModel
             player.Position.y + location.y);
 
         // Prevent the player from stepping off the dungeon floor.
-        if (dungeonLayout[newPosition.x, newPosition.y] != DungeonLayout.Floor)
-        {
-            return;
-        }
+        //if (dungeonLayout[newPosition.x, newPosition.y] != DungeonLayout.Floor)
+        //if(townLayout.Is)
+        //{
+        //    return;
+        //}
 
         // Update the player position.
         player.Position = newPosition;

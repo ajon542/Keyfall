@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections.Generic;
 
-public class Town : MonoBehaviour
+public class Town : ILevelGenerator
 {
     // House - storage of items
     // General Store - food, water, torches, medical supplies
@@ -11,15 +10,19 @@ public class Town : MonoBehaviour
     // Library - books for learning about various things
     // Black market - rare items, rings, amulets
 
-    // Use this for initialization
-    void Start()
+    public List<TownLayout>[,] GenerateLevel(int width, int length)
     {
+        List<TownLayout>[,] townLayout = new List<TownLayout>[width, length];
 
-    }
+        for (int i = 0; i < width; ++i)
+        {
+            for (int j = 0; j < length; ++j)
+            {
+                townLayout[i, j] = new List<TownLayout>();
+                townLayout[i, j].Add(TownLayout.Floor);
+            }
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        return townLayout;
     }
 }

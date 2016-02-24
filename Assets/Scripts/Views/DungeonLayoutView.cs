@@ -4,6 +4,32 @@ using UnityEngine;
 public class DungeonLayoutView : IGameView
 {
     /// <summary>
+    /// Minimum room width and length.
+    /// </summary>
+    public int minRoomSize = 3;
+
+    /// <summary>
+    /// Maximum room width and length.
+    /// </summary>
+    public int maxRoomSize = 10;
+
+    /// <summary>
+    /// Average distance between the rooms.
+    /// </summary>
+    public int roomSpread = 3;
+
+    // TODO: Level dimensions of 1,1 do not work.
+    /// <summary>
+    /// The level dimensions.
+    /// </summary>
+    public int levelDimensionsX = 5;
+
+    /// <summary>
+    /// The level dimensions.
+    /// </summary>
+    public int levelDimensionsZ = 5;
+
+    /// <summary>
     /// The prefab used for the floor.
     /// </summary>
     public GameObject floorTile;
@@ -37,11 +63,14 @@ public class DungeonLayoutView : IGameView
         // Create a root game object to hold all the rooms.
         RoomsGrid = new GameObject { name = "RoomsGrid" };
 
+        int width = msg.DungeonLayout.GetLength(0);
+        int height = msg.DungeonLayout.GetLength(1); 
+
         for (int i = 0; i < Width; ++i)
         {
             for (int j = 0; j < Length; ++j)
             {
-                if (msg.DungeonLayout[i, j] == DungeonLayout.Floor)
+                if (msg.DungeonLayout[i, j] != null && msg.DungeonLayout[i, j].Count > 0 && msg.DungeonLayout[i, j][0] == TownLayout.Floor)
                 {
                     GameObject obj =
                         Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;

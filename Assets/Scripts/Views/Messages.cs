@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 /// <summary>
 /// The base class for all messages.
 /// </summary>
@@ -16,7 +17,7 @@ public class RoomMsg : BaseMsg
 
 public class GenerateDungeon : BaseMsg
 {
-    public DungeonLayout[,] DungeonLayout { get; set; }
+    public List<TownLayout>[,] DungeonLayout { get; set; }
 
     public int Width { get; set; }
     public int Length { get; set; }
@@ -24,7 +25,7 @@ public class GenerateDungeon : BaseMsg
 
 public class GenerateTown : BaseMsg
 {
-    public TownLayout[,] TownLayout { get; set; }
+    public List<TownLayout>[,] TownLayout { get; set; }
 
     public int Width { get; set; }
     public int Length { get; set; }
