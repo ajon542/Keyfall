@@ -9,18 +9,6 @@ public enum Direction
     West
 }
 
-public enum DungeonLayout
-{
-    Unknown,
-    Floor,
-    NorthWall,
-    SouthWall,
-    EastWall,
-    WestWall,
-    Door,
-    Stairs
-}
-
 public enum StructuralItems
 {
     Unknown,
@@ -43,6 +31,11 @@ public enum StructuralItems
     DoorSouth,
     DoorEast,
     DoorWest,
+
+    StairsNorth,
+    StairsSouth,
+    StairsEast,
+    StairsWest,
 }
 
 public enum TownLayout

@@ -29,7 +29,7 @@ public class GameModel : IGameModel
         // Let the base class do its thing.
         base.Initialize(presenter);
 
-        int minRoomSize = 3;
+        // TODO: Clean the variables up.
         int maxRoomSize = 10;
         int roomSpread = 3;
         int gridSize = maxRoomSize + roomSpread;
@@ -38,9 +38,6 @@ public class GameModel : IGameModel
 
         ILevelGenerator townGenerator = new Dungeon(gridSize, 5, 5);
         townLayout = townGenerator.GenerateLevel(Width, Length);
-
-        int width = townLayout.GetLength(0);
-        int height = townLayout.GetLength(1);
 
         GenerateDungeon generateDungeon = new GenerateDungeon();
         generateDungeon.DungeonLayout = townLayout;
@@ -71,6 +68,7 @@ public class GameModel : IGameModel
             player.Position.x + location.x,
             player.Position.y + location.y);
 
+        // TODO:
         // Prevent the player from stepping off the dungeon floor.
         //if (dungeonLayout[newPosition.x, newPosition.y] != DungeonLayout.Floor)
         //if(townLayout.Is)

@@ -7,7 +7,6 @@ public class PlayerView : IGameView
     public void HandlePlayerPosition(PlayerPosition msg)
     {
         gameObject.transform.position = new Vector3((float)msg.Position.x, 0.5f, (float)msg.Position.y);
-        Debug.Log(gameObject.transform.position);
     }
 
     public override void UpdateView()

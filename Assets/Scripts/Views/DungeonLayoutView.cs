@@ -63,9 +63,6 @@ public class DungeonLayoutView : IGameView
         // Create a root game object to hold all the rooms.
         RoomsGrid = new GameObject { name = "RoomsGrid" };
 
-        int width = msg.DungeonLayout.GetLength(0);
-        int height = msg.DungeonLayout.GetLength(1); 
-
         for (int i = 0; i < Width; ++i)
         {
             for (int j = 0; j < Length; ++j)
