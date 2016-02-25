@@ -89,8 +89,8 @@ public class GameModel : IGameModel
             if (Physics.Raycast(ray, out hit))
             {
                 count = 0;
-                Debug.Log(hit.point);
-                path = finder.GetPath(player.Position, new Location((int)hit.point.x, (int)hit.point.z));
+                Debug.Log((int)(hit.point.x + 0.5) + ", " + (int)(hit.point.z + 0.5));
+                path = finder.GetPath(player.Position, new Location((int)(hit.point.x + 0.5), (int)(hit.point.z + 0.5)));
             }
         }
 
