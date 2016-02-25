@@ -30,7 +30,7 @@ public class GameModel : IGameModel
         base.Initialize(presenter);
 
         ILevelGenerator townGenerator = new Town();
-        townLayout = townGenerator.GenerateLevel(5, 15);
+        townLayout = townGenerator.GenerateLevel(100, 100);
 
         //GenerateDungeon generateDungeon = new GenerateDungeon();
         //generateDungeon.DungeonLayout = townLayout;

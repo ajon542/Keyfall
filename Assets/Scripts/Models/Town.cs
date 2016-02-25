@@ -22,7 +22,11 @@ public class Town : ILevelGenerator
 
                 if(i % 2 == 0)
                 {
-                    townLayout[i, j].Add("Floor");
+                    townLayout[i, j].Add("Cracks");
+                    //if(i % 4 == 0)
+                    {
+                      //  townLayout[i, j].Add("Cracks");
+                    }
                 }
                 else
                 {
