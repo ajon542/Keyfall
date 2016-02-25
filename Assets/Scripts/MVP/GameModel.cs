@@ -22,7 +22,7 @@ public class GameModel : IGameModel
 
     IWeightedGraph<Location> grid;
     PathFinder finder;
-    List<Location> path;
+    List<Location> path = new List<Location>();
 
     /// <summary>
     /// Initialize the dungeon level.
@@ -52,8 +52,6 @@ public class GameModel : IGameModel
 
         grid = new DungeonGrid(60, 40);
         finder = new PathFinder(grid);
-
-        path = finder.GetPath(new Location(0, 0), new Location(50, 30));
     }
 
     /// <summary>
@@ -84,6 +82,19 @@ public class GameModel : IGameModel
     private float gameSpeed = 0;
     public override void UpdateModel()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                count = 0;
+                Debug.Log(hit.point);
+                path = finder.GetPath(player.Position, new Location((int)hit.point.x, (int)hit.point.z));
+            }
+        }
+
+
         // TODO: This is sufficient for now, but need to make the camera movement smoother.
         gameSpeed += Time.deltaTime;
         if(gameSpeed < 0.2f)
