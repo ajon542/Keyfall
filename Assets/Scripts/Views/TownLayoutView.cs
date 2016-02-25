@@ -48,7 +48,7 @@ public class TownLayoutView : IGameView
         if (prefabMap.ContainsKey(tileName))
         {
             GameObject obj =
-                Instantiate(prefabMap[tileName], new Vector3(x, 0, y), new Quaternion(1, 0, 0, 1)) as GameObject;
+                Instantiate(prefabMap[tileName], new Vector3(x, 0, y), new Quaternion(0, 0, 0, 1)) as GameObject;
             obj.name = tileName;
             obj.transform.parent = parent;
         }

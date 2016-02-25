@@ -25,7 +25,7 @@ public class Town : ILevelGenerator
                     townLayout[i, j].Add("Floor");
                     if(i % 4 == 0)
                     {
-                        townLayout[i, j].Add("Trap");
+                        townLayout[i, j].Add("NorthDoor");
                     }
                 }
                 else
