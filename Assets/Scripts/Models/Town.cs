@@ -19,7 +19,15 @@ public class Town : ILevelGenerator
             for (int j = 0; j < length; ++j)
             {
                 townLayout[i, j] = new List<string>();
-                townLayout[i, j].Add("Floor");
+
+                if(i % 2 == 0)
+                {
+                    townLayout[i, j].Add("Floor");
+                }
+                else
+                {
+                    townLayout[i, j].Add("Grass");
+                }
             }
         }
 
