@@ -29,18 +29,16 @@ public class GameModel : IGameModel
         // Let the base class do its thing.
         base.Initialize(presenter);
 
-        ILevelGenerator townGenerator = new Dungeon();
+        ILevelGenerator townGenerator = new Town();
         townLayout = townGenerator.GenerateLevel(5, 15);
 
-        GenerateDungeon generateDungeon = new GenerateDungeon();
-        generateDungeon.DungeonLayout = townLayout;
-        presenter.PublishMsg(generateDungeon);
+        //GenerateDungeon generateDungeon = new GenerateDungeon();
+        //generateDungeon.DungeonLayout = townLayout;
+        //presenter.PublishMsg(generateDungeon);
 
-        //GenerateTown generateTown = new GenerateTown();
-        //generateTown.TownLayout = townLayout;
-        //generateTown.Width = Width;
-        //generateTown.Length = Length;
-        //presenter.PublishMsg(generateTown);
+        GenerateTown generateTown = new GenerateTown();
+        generateTown.TownLayout = townLayout;
+        presenter.PublishMsg(generateTown);
 
         player = new Player();
         player.Position = new Location(0, 0);

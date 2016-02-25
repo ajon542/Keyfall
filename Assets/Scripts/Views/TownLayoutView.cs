@@ -3,34 +3,23 @@ using System.Collections.Generic;
 
 public class TownLayoutView : IGameView
 {
-    /// <summary>
-    /// The prefab used for the floor.
-    /// </summary>
-    public GameObject floorTile;
-
-    /// <summary>
-    /// The prefab used for the wall.
-    /// </summary>
-    public GameObject wall;
-
     public List<GameObject> prefabs;
 
     private GameObject RoomsGrid { get; set; }
 
-    /// <summary>
-    /// Gets the width of the room.
-    /// </summary>
     public int Width { get; private set; }
-
-    /// <summary>
-    /// Gets the length of the room.
-    /// </summary>
     public int Length { get; private set; }
 
     [RecvMsgMethod]
     public void HandleGenerateTownMsg(GenerateTown msg)
     {
         Debug.Log("Received GenerateTownMsg");
+
+        Dictionary<string, GameObject> prefabMap = new Dictionary<string, GameObject>();
+        foreach(GameObject go in prefabs)
+        {
+            prefabMap[go.name] = go;
+        }
 
         // Keep track of the floor plan properties.
         Width = msg.TownLayout.GetLength(0);
@@ -45,10 +34,17 @@ public class TownLayoutView : IGameView
             {
                 if (msg.TownLayout[i, j][0] == "Floor")
                 {
-                    GameObject obj =
-                        Instantiate(floorTile, new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
-                    obj.name = "FloorTile";
-                    obj.transform.parent = RoomsGrid.transform;
+                    if(prefabMap.ContainsKey("Floor"))
+                    {
+                        GameObject obj =
+                            Instantiate(prefabMap["Floor"], new Vector3(i, 0, j), new Quaternion(1, 0, 0, 1)) as GameObject;
+                        obj.name = "FloorTile";
+                        obj.transform.parent = RoomsGrid.transform;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Could not find [Floor] prefab");
+                    }
                 }
             }
         }
