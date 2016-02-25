@@ -10,28 +10,18 @@ public class Town : ILevelGenerator
     // Library - books for learning about various things
     // Black market - rare items, rings, amulets
 
+    private List<string>[,] townLayout;
+
     public List<string>[,] GenerateLevel(int width, int length)
     {
-        List<string>[,] townLayout = new List<string>[width, length];
+        townLayout = new List<string>[width, length];
 
         for (int i = 0; i < width; ++i)
         {
             for (int j = 0; j < length; ++j)
             {
                 townLayout[i, j] = new List<string>();
-
-                if(i % 2 == 0)
-                {
-                    townLayout[i, j].Add("Floor");
-                    if(i % 4 == 0)
-                    {
-                        townLayout[i, j].Add("DoorEast");
-                    }
-                }
-                else
-                {
-                    townLayout[i, j].Add("Grass");
-                }
+                townLayout[i, j].Add("Grass");
             }
         }
 

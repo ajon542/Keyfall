@@ -27,12 +27,12 @@ public class PathFinder
     /// <param name="start">The starting location.</param>
     /// <param name="goal">The target location.</param>
     /// <returns>A value indicating the cost of this location.</returns>
-    private static int Heuristic(Location start, Location goal)
-    {
-        int dx = Math.Abs(start.x - goal.x);
-        int dy = Math.Abs(start.y - goal.y);
-        return dx + dy;
-    }
+    //private static int Heuristic(Location start, Location goal)
+    //{
+    //    int dx = Math.Abs(start.x - goal.x);
+    //    int dy = Math.Abs(start.y - goal.y);
+    //    return dx + dy;
+    //}
 
     // Diagonal distanct
     //private static int Heuristic(Location a, Location b)
@@ -43,14 +43,14 @@ public class PathFinder
     //}
 
     // Euclidean distance
-    //private static int Heuristic(Location start, Location goal)
-    //{
-    //    int D = 5;
-    //
-    //    int dx = Math.Abs(start.x - goal.x);
-    //    int dy = Math.Abs(start.y - goal.y);
-    //    return D*(int)Math.Sqrt(dx*dx + dy*dy);
-    //}
+    private static int Heuristic(Location start, Location goal)
+    {
+        int D = 5;
+    
+        int dx = Math.Abs(start.x - goal.x);
+        int dy = Math.Abs(start.y - goal.y);
+        return D*(int)Math.Sqrt(dx*dx + dy*dy);
+    }
 
     /// <summary>
     /// Creates a new instance of the <see cref="PathFinder"/> class.
@@ -131,6 +131,7 @@ public class PathFinder
         }
 
         path.Add(start);
+        path.Reverse();
 
         Clear();
         return path;

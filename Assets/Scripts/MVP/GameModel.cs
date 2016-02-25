@@ -20,6 +20,10 @@ public class GameModel : IGameModel
 
     private Player player;
 
+    IWeightedGraph<Location> grid;
+    PathFinder finder;
+    List<Location> path;
+
     /// <summary>
     /// Initialize the dungeon level.
     /// </summary>
@@ -30,7 +34,7 @@ public class GameModel : IGameModel
         base.Initialize(presenter);
 
         ILevelGenerator townGenerator = new Town();
-        townLayout = townGenerator.GenerateLevel(100, 100);
+        townLayout = townGenerator.GenerateLevel(60, 40);
 
         //GenerateDungeon generateDungeon = new GenerateDungeon();
         //generateDungeon.DungeonLayout = townLayout;
@@ -45,6 +49,11 @@ public class GameModel : IGameModel
         PlayerPosition playerPosition = new PlayerPosition();
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
+
+        grid = new DungeonGrid(60, 40);
+        finder = new PathFinder(grid);
+
+        path = finder.GetPath(new Location(0, 0), new Location(50, 30));
     }
 
     /// <summary>
@@ -53,12 +62,9 @@ public class GameModel : IGameModel
     /// <param name="location">The new player location</param>
     private void UpdatePlayerPosition(Location location)
     {
-        Location newPosition = new Location(
-            player.Position.x + location.x,
-            player.Position.y + location.y);
+        Location newPosition = new Location(location.x, location.y);
 
-        // TODO:
-        // Prevent the player from stepping off the dungeon floor.
+        // TODO: Error! Prevent the player from stepping off the dungeon floor.
         //if (dungeonLayout[newPosition.x, newPosition.y] != DungeonLayout.Floor)
         //if(townLayout.Is)
         //{
@@ -74,32 +80,24 @@ public class GameModel : IGameModel
         presenter.PublishMsg(playerPosition);
     }
 
+    private int count = 0;
     private float gameSpeed = 0;
     public override void UpdateModel()
     {
         // TODO: This is sufficient for now, but need to make the camera movement smoother.
         gameSpeed += Time.deltaTime;
-        if(gameSpeed < 0.1f)
+        if(gameSpeed < 0.2f)
         {
             return;
         }
+        
         gameSpeed = 0;
 
-        if (Input.GetKey(KeyCode.W))
+        if(count >= path.Count)
         {
-            UpdatePlayerPosition(new Location(0, 1));
+            return;
         }
-        if (Input.GetKey(KeyCode.S))
-        {
-            UpdatePlayerPosition(new Location(0, -1));
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            UpdatePlayerPosition(new Location(-1, 0));
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            UpdatePlayerPosition(new Location(1, 0));
-        }
+        Location next = path[count++];
+        UpdatePlayerPosition(next);
     }
 }
