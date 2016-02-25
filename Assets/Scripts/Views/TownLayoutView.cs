@@ -33,9 +33,12 @@ public class TownLayoutView : IGameView
         {
             for (int j = 0; j < Length; ++j)
             {
-                // TODO: Handle the list of tiles.
-                string tileName = msg.TownLayout[i, j][0];
-                AddTile(tileName, RoomsGrid.transform, i, j);
+                // Display all tiles at a particular location.
+                for (int k = 0; k < msg.TownLayout[i, j].Count; ++k)
+                {
+                    string tileName = msg.TownLayout[i, j][k];
+                    AddTile(tileName, RoomsGrid.transform, i, j);
+                }
             }
         }
     }
