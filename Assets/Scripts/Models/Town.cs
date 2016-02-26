@@ -22,13 +22,44 @@ public class Town : ILevelGenerator
             {
                 townLayout[i, j] = new List<string>();
 
+                // TODO: May want to make the grass/floor random and smoothed?
                 if ((i * j + j) % 2 == 0)
-                { townLayout[i, j].Add("Grass"); }
+                {
+                    townLayout[i, j].Add("Grass");
+                }
                 else
-                { townLayout[i, j].Add("Floor"); }
+                {
+                    townLayout[i, j].Add("Floor");
+                }
             }
         }
 
         return townLayout;
+    }
+
+    private void GenerateRoom(Location location, int width, int length)
+    {
+        for (int i = location.x; i < location.x + width; ++i)
+        {
+            for (int j = location.y; j < location.y + length; ++j)
+            {
+                if (j == location.y)
+                {
+                    townLayout[i, j].Add("WallSouth");
+                }
+                if (i == location.x)
+                {
+                    townLayout[i, j].Add("WallWest");
+                }
+                if (i == location.x + width - 1)
+                {
+                    townLayout[i + 1, j].Add("WallWest");
+                }
+                if (j == location.y + length - 1)
+                {
+                    townLayout[i, j + 1].Add("WallSouth");
+                }
+            }
+        }
     }
 }
