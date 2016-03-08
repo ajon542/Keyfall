@@ -34,7 +34,7 @@ public class GameModel : IGameModel
         base.Initialize(presenter);
 
         ILevelGenerator townGenerator = new Town();
-        townLayout = townGenerator.GenerateLevel(60, 40);
+        townLayout = townGenerator.GenerateLevel(100, 100);
 
         //GenerateDungeon generateDungeon = new GenerateDungeon();
         //generateDungeon.DungeonLayout = townLayout;
@@ -50,7 +50,7 @@ public class GameModel : IGameModel
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
 
-        grid = new DungeonGrid(60, 40);
+        grid = new DungeonGrid(100, 100);
         finder = new PathFinder(grid);
     }
 
@@ -88,6 +88,7 @@ public class GameModel : IGameModel
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
+                // TODO: I think the A* search is overkill for what we want.
                 count = 0;
                 Debug.Log((int)(hit.point.x + 0.5) + ", " + (int)(hit.point.z + 0.5));
                 path = finder.GetPath(player.Position, new Location((int)(hit.point.x + 0.5), (int)(hit.point.z + 0.5)));
