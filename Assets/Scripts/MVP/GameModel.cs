@@ -20,9 +20,11 @@ public class GameModel : IGameModel
 
     private Player player;
 
-    IWeightedGraph<Location> grid;
-    PathFinder finder;
-    List<Location> path = new List<Location>();
+    private IWeightedGraph<Location> grid;
+    private PathFinder finder;
+    private List<Location> path = new List<Location>();
+
+    private StoreManager storeManager;
 
     /// <summary>
     /// Initialize the dungeon level.
@@ -52,6 +54,9 @@ public class GameModel : IGameModel
 
         grid = new DungeonGrid(20, 20);
         finder = new PathFinder(grid);
+
+        storeManager = new StoreManager();
+        storeManager.Initialize(presenter);
     }
 
     /// <summary>
