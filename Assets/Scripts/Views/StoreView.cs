@@ -73,11 +73,11 @@ public class StoreView : IGameView
         storeNameText.text = msg.StoreName;
         storeFundsText.text = msg.StoreFunds.ToString();
 
-        for(int i = 0; i < 30; ++i)
+        foreach (Item item in msg.StoreItems)
         {
             GameObject listItem = (GameObject)Instantiate(listItemPrefab);
 
-            listItem.GetComponentInChildren<Text>().text = i.ToString();
+            listItem.GetComponentInChildren<Text>().text = item.Name;
 
             listItem.transform.SetParent(inventoryListParent.transform);
         }

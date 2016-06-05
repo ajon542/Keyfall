@@ -12,7 +12,7 @@ public class Store
 {
     public string StoreName { get; private set; }
     public int StoreFunds { get; private set; }
-    public Dictionary<string, int> StoreItems { get; private set; }
+    public List<Item> StoreItems { get; private set; }
     private Presenter presenter;
 
     public Store(Presenter presenter)
@@ -28,11 +28,23 @@ public class Store
         StoreName = "Armourer";
         StoreFunds = 2345;
 
-        StoreItems = new Dictionary<string, int>();
-        StoreItems.Add("Sword", 100);
-        StoreItems.Add("Chainmail Armour", 100);
-        StoreItems.Add("Torch", 100);
-        StoreItems.Add("Axe", 200);
+        StoreItems = new List<Item>();
+        StoreItems.Add(new Item { Name = "Sword", Value = 100, Description = "Longsword of the damned" });
+        StoreItems.Add(new Item { Name = "Chainmain Armour", Value = 500, Description = "Armour of valor" });
+        StoreItems.Add(new Item { Name = "Torch", Value = 5, Description = "Lighting the way" });
+        StoreItems.Add(new Item { Name = "Boots", Value = 100, Description = "Hard leather boots" });
+        StoreItems.Add(new Item { Name = "Sword", Value = 100, Description = "Longsword of the damned" });
+        StoreItems.Add(new Item { Name = "Chainmain Armour", Value = 500, Description = "Armour of valor" });
+        StoreItems.Add(new Item { Name = "Torch", Value = 5, Description = "Lighting the way" });
+        StoreItems.Add(new Item { Name = "Boots", Value = 100, Description = "Hard leather boots" });
+        StoreItems.Add(new Item { Name = "Sword", Value = 100, Description = "Longsword of the damned" });
+        StoreItems.Add(new Item { Name = "Chainmain Armour", Value = 500, Description = "Armour of valor" });
+        StoreItems.Add(new Item { Name = "Torch", Value = 5, Description = "Lighting the way" });
+        StoreItems.Add(new Item { Name = "Boots", Value = 100, Description = "Hard leather boots" });
+        StoreItems.Add(new Item { Name = "Sword", Value = 100, Description = "Longsword of the damned" });
+        StoreItems.Add(new Item { Name = "Chainmain Armour", Value = 500, Description = "Armour of valor" });
+        StoreItems.Add(new Item { Name = "Torch", Value = 5, Description = "Lighting the way" });
+        StoreItems.Add(new Item { Name = "Boots", Value = 100, Description = "Hard leather boots" });
     }
 
     /// <summary>

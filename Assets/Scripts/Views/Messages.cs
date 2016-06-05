@@ -43,5 +43,5 @@ public class StoreInitializeMsg : BaseMsg
 {
     public string StoreName { get; set; }
     public int StoreFunds { get; set; }
-    public Dictionary<string, int> StoreItems { get; set; }
+    public List<Item> StoreItems { get; set; }
 }
