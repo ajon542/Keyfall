@@ -25,6 +25,8 @@ public class Town : ILevelGenerator
             }
         }
 
+        GenerateRoom(new Location(5, 5), 6, 9);
+
         return townLayout;
     }
 

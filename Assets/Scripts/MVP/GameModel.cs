@@ -82,6 +82,7 @@ public class GameModel : IGameModel
     private float gameSpeed = 0;
     public override void UpdateModel()
     {
+        // TODO: This should really come from the view. The position request selected and the model decides.
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
