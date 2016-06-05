@@ -13,18 +13,33 @@ using System.Collections.Generic;
 /// </remarks>
 public class StoreView : IGameView
 {
+    /// <summary>
+    /// The store name text object must be present on the canvas object.
+    /// </summary>
     [SerializeField]
     private Text storeNameText;
 
+    /// <summary>
+    /// The store funds text object must be present on the canvas object.
+    /// </summary>
     [SerializeField]
     private Text storeFundsText;
 
+    /// <summary>
+    /// This provides the parent object to be able to attach the runtime generated inventory list.
+    /// </summary>
     [SerializeField]
     private GameObject inventoryListParent;
 
+    /// <summary>
+    /// The button prefab to be generated. This represents a single item in the store.
+    /// </summary>
     [SerializeField]
     private GameObject listItemPrefab;
 
+    /// <summary>
+    /// Perform some basic error checking.
+    /// </summary>
     private void Start()
     {
         if (storeNameText == null)
@@ -36,8 +51,22 @@ public class StoreView : IGameView
         {
             Debug.LogError("Please attach a store funds text object");
         }
+
+        if (inventoryListParent == null)
+        {
+            Debug.LogError("Please attach a store inventory list parent");
+        }
+
+        if (listItemPrefab == null)
+        {
+            Debug.LogError("Please attach a list item prefab");
+        }
     }
 
+    /// <summary>
+    /// The store initialization comes from the store model.
+    /// </summary>
+    /// <param name="msg">The message containing all the information about the store, including store name and items etc.</param>
     [RecvMsgMethod]
     public void HandleStoreInitializeMsg(StoreInitializeMsg msg)
     {
