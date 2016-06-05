@@ -34,7 +34,7 @@ public class GameModel : IGameModel
         base.Initialize(presenter);
 
         ILevelGenerator townGenerator = new Town();
-        townLayout = townGenerator.GenerateLevel(100, 100);
+        townLayout = townGenerator.GenerateLevel(20, 20);
 
         //GenerateDungeon generateDungeon = new GenerateDungeon();
         //generateDungeon.DungeonLayout = townLayout;
@@ -50,7 +50,7 @@ public class GameModel : IGameModel
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
 
-        grid = new DungeonGrid(100, 100);
+        grid = new DungeonGrid(20, 20);
         finder = new PathFinder(grid);
     }
 

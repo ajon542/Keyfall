@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class TownLayoutView : IGameView
 {
     public List<GameObject> prefabs;
-    Dictionary<string, GameObject> prefabMap;
+    private Dictionary<string, GameObject> prefabMap;
 
     private GameObject RoomsGrid { get; set; }
 
@@ -56,5 +56,10 @@ public class TownLayoutView : IGameView
         {
             Debug.LogWarning("Could not find [" + tileName + "] prefab");
         }
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(RoomsGrid);
     }
 }
