@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Generic store view.
@@ -17,6 +18,12 @@ public class StoreView : IGameView
 
     [SerializeField]
     private Text storeFundsText;
+
+    [SerializeField]
+    private GameObject inventoryListParent;
+
+    [SerializeField]
+    private GameObject listItemPrefab;
 
     private void Start()
     {
@@ -36,5 +43,14 @@ public class StoreView : IGameView
     {
         storeNameText.text = msg.StoreName;
         storeFundsText.text = msg.StoreFunds.ToString();
+
+        for(int i = 0; i < 30; ++i)
+        {
+            GameObject listItem = (GameObject)Instantiate(listItemPrefab);
+
+            listItem.GetComponentInChildren<Text>().text = i.ToString();
+
+            listItem.transform.SetParent(inventoryListParent.transform);
+        }
     }
 }
