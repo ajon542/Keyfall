@@ -21,16 +21,7 @@ public class Town : ILevelGenerator
             for (int j = 0; j < length; ++j)
             {
                 townLayout[i, j] = new List<string>();
-
-                // TODO: May want to make the grass/floor random and smoothed?
-                if ((i * j + j) % 2 == 0)
-                {
-                    townLayout[i, j].Add("Grass");
-                }
-                else
-                {
-                    townLayout[i, j].Add("Floor");
-                }
+                townLayout[i, j].Add("Grass");
             }
         }
 
