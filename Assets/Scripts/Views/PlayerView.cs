@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerView : IGameView
 {
     [RecvMsgMethod]
-    public void HandlePlayerPosition(PlayerPosition msg)
+    public void HandlePlayerPosition(PlayerPositionMsg msg)
     {
         gameObject.transform.position = new Vector3((float)msg.Position.x, 0.5f, (float)msg.Position.y);
     }

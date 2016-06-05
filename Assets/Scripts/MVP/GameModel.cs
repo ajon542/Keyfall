@@ -42,13 +42,13 @@ public class GameModel : IGameModel
         //generateDungeon.DungeonLayout = townLayout;
         //presenter.PublishMsg(generateDungeon);
 
-        GenerateTown generateTown = new GenerateTown();
+        GenerateTownMsg generateTown = new GenerateTownMsg();
         generateTown.TownLayout = townLayout;
         presenter.PublishMsg(generateTown);
 
         player = new Player();
         player.Position = new Location(0, 0);
-        PlayerPosition playerPosition = new PlayerPosition();
+        PlayerPositionMsg playerPosition = new PlayerPositionMsg();
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
 
@@ -79,7 +79,7 @@ public class GameModel : IGameModel
         player.Position = newPosition;
 
         // Send the updated position to the view.
-        PlayerPosition playerPosition = new PlayerPosition();
+        PlayerPositionMsg playerPosition = new PlayerPositionMsg();
         playerPosition.Position = player.Position;
         presenter.PublishMsg(playerPosition);
     }

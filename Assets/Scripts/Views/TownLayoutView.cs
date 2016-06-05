@@ -12,7 +12,7 @@ public class TownLayoutView : IGameView
     public int Length { get; private set; }
 
     [RecvMsgMethod]
-    public void HandleGenerateTownMsg(GenerateTown msg)
+    public void HandleGenerateTownMsg(GenerateTownMsg msg)
     {
         Debug.Log("Received GenerateTownMsg");
 

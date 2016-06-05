@@ -14,7 +14,7 @@ public class DungeonLayoutView : IGameView
     private GameObject RoomsGrid { get; set; }
 
     [RecvMsgMethod]
-    public void HandleGenerateDungeonMsg(GenerateDungeon msg)
+    public void HandleGenerateDungeonMsg(GenerateDungeonMsg msg)
     {
         Debug.Log("Received GenerateDungeonMsg");
 
@@ -41,7 +41,7 @@ public class DungeonLayoutView : IGameView
     }
 
     [RecvMsgMethod]
-    public void HandleDestroyDungeonMsg(DestroyDungeon msg)
+    public void HandleDestroyDungeonMsg(DestroyDungeonMsg msg)
     {
         Debug.Log("Received DestroyDungeonMsg");
         Destroy(RoomsGrid);

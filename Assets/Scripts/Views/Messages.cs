@@ -16,22 +16,22 @@ public class RoomMsg : BaseMsg
 {
 }
 
-public class GenerateDungeon : BaseMsg
+public class GenerateDungeonMsg : BaseMsg
 {
     public List<string>[,] DungeonLayout { get; set; }
 }
 
-public class GenerateTown : BaseMsg
+public class GenerateTownMsg : BaseMsg
 {
     public List<string>[,] TownLayout { get; set; }
 }
 
-public class DestroyDungeon : BaseMsg
+public class DestroyDungeonMsg : BaseMsg
 {
 
 }
 
-public class PlayerPosition : BaseMsg
+public class PlayerPositionMsg : BaseMsg
 {
     public Location Position { get; set; }
 }
