@@ -55,6 +55,7 @@ public class GameModel : IGameModel
         grid = new DungeonGrid(20, 20);
         finder = new PathFinder(grid);
 
+        // TODO: This is only to test the store model/view behaviour.
         storeManager = new StoreManager();
         storeManager.Initialize(presenter);
     }
