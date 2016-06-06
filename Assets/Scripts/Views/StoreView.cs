@@ -26,6 +26,12 @@ public class StoreView : IGameView
     private Text storeFundsText;
 
     /// <summary>
+    /// The item description text object must be present on the canvas object.
+    /// </summary>
+    [SerializeField]
+    private Text descriptionText;
+
+    /// <summary>
     /// This provides the parent object to be able to attach the runtime generated inventory list.
     /// </summary>
     [SerializeField]
@@ -36,6 +42,11 @@ public class StoreView : IGameView
     /// </summary>
     [SerializeField]
     private GameObject listItemPrefab;
+
+    /// <summary>
+    /// Keep track of the store data.
+    /// </summary>
+    private StoreInitializeMsg storeData;
 
     /// <summary>
     /// Perform some basic error checking.
@@ -70,6 +81,8 @@ public class StoreView : IGameView
     [RecvMsgMethod]
     public void HandleStoreInitializeMsg(StoreInitializeMsg msg)
     {
+        storeData = msg;
+
         storeNameText.text = msg.StoreName;
         storeFundsText.text = msg.StoreFunds.ToString();
 
@@ -81,5 +94,12 @@ public class StoreView : IGameView
 
             listItem.transform.SetParent(inventoryListParent.transform);
         }
+
+        DisplayDescription();
+    }
+
+    private void DisplayDescription()
+    {
+        descriptionText.text = storeData.StoreItems[0].Description;
     }
 }
