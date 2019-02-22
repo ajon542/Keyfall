@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using DG.Tweening;
 
-public class TilemapTest : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public Tilemap _tilemap;
+    public float _movementTime;
     private PathFinder _pathFinder;
     private Sequence _currentSequence;
 
@@ -43,7 +44,7 @@ public class TilemapTest : MonoBehaviour
             if (currentPathWorldPositions.Count > 0)
                 currentPathWorldPositions[0] = gameObject.transform.position;
             
-            float pathTravelTime = currentPathWorldPositions.Count * 0.1f;
+            float pathTravelTime = currentPathWorldPositions.Count * _movementTime;
             
             _currentSequence?.Kill();
             _currentSequence = DOTween.Sequence();
