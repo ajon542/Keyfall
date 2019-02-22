@@ -48,6 +48,8 @@ Library
 Temp
 *.csproj
 *.sln
-*.DotSettings
 *.suo
+*.idea
+*JetBrains*
+*DotSettings*
 UnityVS.LevelGenerator.v12.suo
