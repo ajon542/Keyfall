@@ -105,14 +105,14 @@ public class PathFinder
                 if (!costSoFar.ContainsKey(neighbour) || newCost < costSoFar[neighbour])
                 {
                     // Add the neighbour with the cost.
-                    costSoFar.Add(neighbour, newCost);
+                    costSoFar[neighbour] = newCost;
 
                     // Calculate and add the neighbour at the given priority.
                     int priority = newCost + _pathHeuristic.Heuristic(neighbour, goal);
                     frontier.Enqueue(neighbour, priority);
 
                     // Update how we reached this neighbour for path construction.
-                    cameFrom.Add(neighbour, current);
+                    cameFrom[neighbour] = current;
                 }
             }
         }
