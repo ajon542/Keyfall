@@ -10,17 +10,22 @@ public class PlayerController : MonoBehaviour
     public float _movementTime;
     private PathFinder _pathFinder;
     private Sequence _currentSequence;
+    private NodeCostChainOfResponsibilities _graphNode;
+    private FloorGraphNodeCost _floorNodeCost;
+    private ObstacleGraphNodeCost _obstacleNodeCost;
 
     private void Start()
     {
         var pathHeuristic = new ManhattanHeuristic();
         var graph = new TilemapGraph(_tilemap);
-        var graphNodeCost = new NodeCostChainOfResponsibilities(new List<IGraphNodeCost>
+        _obstacleNodeCost = new ObstacleGraphNodeCost(_obstacles);
+        _floorNodeCost = new FloorGraphNodeCost(_tilemap);
+        _graphNode = new NodeCostChainOfResponsibilities(new List<IGraphNodeCost>
         {
-            new ObstacleGraphNodeCost(_obstacles),
-            new FloorGraphNodeCost(_tilemap)
+            _obstacleNodeCost,
+            _floorNodeCost
         });
-        _pathFinder = new PathFinder(graph, graphNodeCost, pathHeuristic);
+        _pathFinder = new PathFinder(graph, _graphNode, pathHeuristic);
     }
 
     private void Update()
@@ -29,12 +34,10 @@ public class PlayerController : MonoBehaviour
         {            
             var mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var cellPosition = _tilemap.WorldToCell(mouseWorldPosition);
-            
-            Debug.Log($"floorPos={_tilemap.WorldToCell(mouseWorldPosition)}, " +
-                      $"obstaclePos={_obstacles.WorldToCell(mouseWorldPosition)}");
 
-            // TODO: You can still click on non-passable tiles and can walk into them
-            if (_tilemap.HasTile(cellPosition) == false)
+            // Don't consider a path if the target node costs more than the floor
+            // A little bit messy but ok for now.
+            if (_graphNode.Cost(cellPosition).Cost > _floorNodeCost.Cost(cellPosition).Cost)
                 return;
 
             var targetCellPosition = cellPosition;
