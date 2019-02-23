@@ -9,13 +9,14 @@ namespace Tests
 {
     public class BehaviourTreeTests
     {
-        [Test]
-        public void BehaviourTreeWithNoTasksReturnsSuccessAfterFirstTick()
+        [TestCase(TaskStatus.Success)]
+        [TestCase(TaskStatus.Failure)]
+        public void BehaviourTreeReturnsTaskStatus(TaskStatus taskStatus)
         {
-            var bt = new BehaviourTree();
+            var bt = new BehaviourTree(new StatusActionTask(taskStatus));
             Assert.AreEqual(TaskStatus.Incomplete, bt.CurrentStatus);
-            Assert.AreEqual(TaskStatus.Success, bt.Tick());
-            Assert.AreEqual(TaskStatus.Success, bt.CurrentStatus);
+            Assert.AreEqual(taskStatus, bt.Tick());
+            Assert.AreEqual(taskStatus, bt.CurrentStatus);
         }
         
         [TestCase(TaskStatus.Success, ExpectedResult = TaskStatus.Success)]

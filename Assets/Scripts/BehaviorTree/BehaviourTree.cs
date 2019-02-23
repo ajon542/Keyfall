@@ -3,14 +3,17 @@ public class BehaviourTree : IBehaviourTree
 {
     public TaskStatus CurrentStatus { get; private set; }
 
-    public BehaviourTree()
+    private ITask _task;
+
+    public BehaviourTree(ITask task)
     {
         CurrentStatus = TaskStatus.Incomplete;
+        _task = task;
     }
 
     public TaskStatus Tick()
     {
-        CurrentStatus = TaskStatus.Success;
+        CurrentStatus = _task.Tick();
         return CurrentStatus;
     }
 }
