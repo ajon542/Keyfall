@@ -5,8 +5,10 @@ using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
-    public Tilemap _tilemap;
+    public Tilemap _floor;
     public Tilemap _obstacles;
+    public Tilemap _collectables;
+    
     public float _movementTime;
     private PathFinder _pathFinder;
     private Sequence _currentSequence;
@@ -17,9 +19,9 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         var pathHeuristic = new ManhattanHeuristic();
-        var graph = new TilemapGraph(_tilemap);
+        var graph = new TilemapGraph(_floor);
         _obstacleNodeCost = new ObstacleGraphNodeCost(_obstacles);
-        _floorNodeCost = new FloorGraphNodeCost(_tilemap);
+        _floorNodeCost = new FloorGraphNodeCost(_floor);
         _graphNode = new NodeCostChainOfResponsibilities(new List<IGraphNodeCost>
         {
             _obstacleNodeCost,
@@ -30,13 +32,30 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {            
+        // Example of collecting something
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonUp(0))
+        {
             var mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            var cellPosition = _tilemap.WorldToCell(mouseWorldPosition);
+            var mouseCellPosition = _floor.WorldToCell(mouseWorldPosition);
+            var playerCellPosition = _floor.WorldToCell(transform.position);
+
+            if (playerCellPosition != mouseCellPosition)
+                return;
+            
+            if (_collectables.HasTile(mouseCellPosition))
+            {
+                _collectables.SetTile(mouseCellPosition, null);
+            }
+        }
+        
+        // Example of pathfinding
+        if (Input.GetMouseButtonUp(0))
+        {
+            var mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var cellPosition = _floor.WorldToCell(mouseWorldPosition);
 
             var targetCellPosition = cellPosition;
-            var currentCellPosition = _tilemap.WorldToCell(gameObject.transform.position);
+            var currentCellPosition = _floor.WorldToCell(gameObject.transform.position);
 
             var currentPath = _pathFinder.GetPath(currentCellPosition, targetCellPosition);
             if (currentPath == null)
@@ -52,8 +71,8 @@ public class PlayerController : MonoBehaviour
             var currentPathWorldPositions = new List<Vector3>();
             foreach (var pos in currentPath)
             {
-                var cellWorldPosition = _tilemap.CellToWorld(pos);
-                var cellCenterWorldPosition = _tilemap.GetCellCenterWorld(pos);          
+                var cellWorldPosition = _floor.CellToWorld(pos);
+                var cellCenterWorldPosition = _floor.GetCellCenterWorld(pos);          
                 currentPathWorldPositions.Add(new Vector3(cellCenterWorldPosition.x, cellWorldPosition.y, 0));
             }
 
