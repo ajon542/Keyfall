@@ -4,10 +4,9 @@ using UnityEngine.Tilemaps;
 using DG.Tweening;
 
 public class EnemyController : MonoBehaviour
-{
-    // How doe we stop enemies walking on each other?
-    
+{    
     public Tilemap _tilemap;
+    public Tilemap _obstacles;
     public PlayerController _player; // TODO: Only temporary
     public float _movementTime;
     private float _reevaluatePathInterval;
@@ -18,8 +17,13 @@ public class EnemyController : MonoBehaviour
     private void Start()
     {
         var pathHeuristic = new EuclideanHeuristic();
-        var weightedGraph = new TilemapWeightedGraph(_tilemap);
-        _pathFinder = new PathFinder(weightedGraph, pathHeuristic);
+        var graph = new TilemapGraph(_tilemap);
+        var graphNodeCost = new NodeCostChainOfResponsibilities(new List<IGraphNodeCost>
+        {
+            new ObstacleGraphNodeCost(_obstacles),
+            new FloorGraphNodeCost(_tilemap)
+        });
+        _pathFinder = new PathFinder(graph, graphNodeCost, pathHeuristic);
         _reevaluatePathInterval = 3;
     }
 

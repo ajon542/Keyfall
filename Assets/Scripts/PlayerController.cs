@@ -6,6 +6,7 @@ using DG.Tweening;
 public class PlayerController : MonoBehaviour
 {
     public Tilemap _tilemap;
+    public Tilemap _obstacles;
     public float _movementTime;
     private PathFinder _pathFinder;
     private Sequence _currentSequence;
@@ -13,17 +14,26 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         var pathHeuristic = new ManhattanHeuristic();
-        var weightedGraph = new TilemapWeightedGraph(_tilemap);
-        _pathFinder = new PathFinder(weightedGraph, pathHeuristic);
+        var graph = new TilemapGraph(_tilemap);
+        var graphNodeCost = new NodeCostChainOfResponsibilities(new List<IGraphNodeCost>
+        {
+            new ObstacleGraphNodeCost(_obstacles),
+            new FloorGraphNodeCost(_tilemap)
+        });
+        _pathFinder = new PathFinder(graph, graphNodeCost, pathHeuristic);
     }
 
     private void Update()
     {
         if (Input.GetMouseButtonUp(0))
-        {
+        {            
             var mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var cellPosition = _tilemap.WorldToCell(mouseWorldPosition);
+            
+            Debug.Log($"floorPos={_tilemap.WorldToCell(mouseWorldPosition)}, " +
+                      $"obstaclePos={_obstacles.WorldToCell(mouseWorldPosition)}");
 
+            // TODO: You can still click on non-passable tiles and can walk into them
             if (_tilemap.HasTile(cellPosition) == false)
                 return;
 

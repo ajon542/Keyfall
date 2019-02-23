@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class PathFinder
 {
-    private IWeightedGraph _graph;
+    private IGraph _graph;
+    private IGraphNodeCost _graphNodeCost;
     private IPathHeuristic _pathHeuristic;
     private Dictionary<Vector3Int, Vector3Int> _cameFrom = new Dictionary<Vector3Int, Vector3Int>();
     private Dictionary<Vector3Int, int> _costSoFar = new Dictionary<Vector3Int, int>();
 
-    public PathFinder(IWeightedGraph graph, IPathHeuristic pathHeuristic)
+    public PathFinder(IGraph graph, IGraphNodeCost graphNodeCost, IPathHeuristic pathHeuristic)
     {
         _graph = graph;
+        _graphNodeCost = graphNodeCost;
         _pathHeuristic = pathHeuristic;
     }
 
@@ -33,7 +35,7 @@ public class PathFinder
             foreach (var neighbour in neighbors)
             {
                 // Calculate the new cost of moving to the neighbouring location.
-                int newCost = _costSoFar[current] + _graph.Cost(neighbour);
+                int newCost = _costSoFar[current] + _graphNodeCost.Cost(neighbour).Cost;
 
                 // Make sure we haven't already visited that neighbour unless
                 // the new cost is better by visiting that neighbour again.
