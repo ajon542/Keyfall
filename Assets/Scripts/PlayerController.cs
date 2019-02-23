@@ -35,15 +35,17 @@ public class PlayerController : MonoBehaviour
             var mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var cellPosition = _tilemap.WorldToCell(mouseWorldPosition);
 
-            // Don't consider a path if the target node costs more than the floor
-            // A little bit messy but ok for now.
-            if (_graphNode.Cost(cellPosition).Cost > _floorNodeCost.Cost(cellPosition).Cost)
-                return;
-
             var targetCellPosition = cellPosition;
             var currentCellPosition = _tilemap.WorldToCell(gameObject.transform.position);
 
             var currentPath = _pathFinder.GetPath(currentCellPosition, targetCellPosition);
+            
+            // Process the given path to ensure there are no blocking obstacles
+            foreach (var node in currentPath)
+            {
+                if (_graphNode.Cost(node) == _obstacleNodeCost.Cost(node))
+                    return;
+            }
             
             var currentPathWorldPositions = new List<Vector3>();
             foreach (var pos in currentPath)

@@ -13,7 +13,7 @@ public class ObstacleGraphNodeCost : IGraphNodeCost
     public NodeCost Cost(Vector3Int node)
     {
         if (_tilemap.HasTile(node))
-            return new NodeCost {Cost = 100};
+            return new NodeCost(100);
         return null;
     }
 }

@@ -35,7 +35,7 @@ public class PathFinder
             foreach (var neighbour in neighbors)
             {
                 // Calculate the new cost of moving to the neighbouring location.
-                int newCost = _costSoFar[current] + _graphNodeCost.Cost(neighbour).Cost;
+                int newCost = _costSoFar[current] + _graphNodeCost.Cost(neighbour).Value;
 
                 // Make sure we haven't already visited that neighbour unless
                 // the new cost is better by visiting that neighbour again.
