@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour
             var currentCellPosition = _tilemap.WorldToCell(gameObject.transform.position);
 
             var currentPath = _pathFinder.GetPath(currentCellPosition, targetCellPosition);
+            if (currentPath == null)
+                return;
             
             // Process the given path to ensure there are no blocking obstacles
             foreach (var node in currentPath)

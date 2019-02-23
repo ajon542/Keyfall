@@ -18,6 +18,8 @@ public class PathFinder
 
     public List<Vector3Int> GetPath(Vector3Int start, Vector3Int goal)
     {
+        Clear();
+        
         var frontier = new PriorityQueue<Vector3Int>();
         frontier.Enqueue(start, 0);
 
@@ -54,19 +56,15 @@ public class PathFinder
             }
         }
 
-        // Check if the goal was reached.
+        // Check if the goal was reached
         if (!_cameFrom.ContainsKey(goal))
-        {
-            // Could not find a path to goal.
-            Clear();
             return null;
-        }
 
-        var path = new List<Vector3Int>();
-        path.Add(goal);
+        // Reconstruct the path
+        var path = new List<Vector3Int> {goal};
 
         var previous = _cameFrom[goal];
-        while ((previous.x != start.x) || (previous.y != start.y))
+        while (previous != start)
         {
             path.Add(previous);
             previous = _cameFrom[previous];
@@ -74,8 +72,6 @@ public class PathFinder
 
         path.Add(start);
         path.Reverse();
-
-        Clear();
         return path;
     }
 
