@@ -5,10 +5,12 @@ public class SelectorTask : ITask
     private readonly List<ITask> _children;
     private int _currentChildIndex;
     private TaskStatus _currentStatus;
+    private bool _resettable;
 
-    public SelectorTask(List<ITask> children)
+    public SelectorTask(List<ITask> children, bool resettable = false)
     {
         _children = children;
+        _resettable = resettable;
     }
 
     public TaskStatus Tick()
@@ -24,6 +26,7 @@ public class SelectorTask : ITask
             _currentChildIndex++;
             if (_currentChildIndex >= _children.Count)
             {
+                Complete();
                 return TaskStatus.Failure;
             }
 
@@ -31,5 +34,13 @@ public class SelectorTask : ITask
         }
 
         return childStatus;
+    }
+    
+    private void Complete()
+    {
+        if (!_resettable)
+            return;
+        _currentChildIndex = 0;
+        _currentStatus = TaskStatus.Incomplete;
     }
 }

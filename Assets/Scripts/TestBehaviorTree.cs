@@ -5,30 +5,25 @@ using UnityEngine;
 public class TestBehaviorTree : MonoBehaviour
 {
     private BehaviourTree _behaviorTree;
+
+    public Transform _sourceTransform;
+    public Transform _targetTransform;
+    
     void Start()
     {
         var sequenceTask = new SequenceTask(new List<ITask>
         {
-            new LogAction("Child 1"),
-            new WaitAction(1),
-            new LogAction("Child 2"),
-            new WaitAction(1),
-            new LogAction("Child 3"),
-            new LogAction("Child 4"),
-            new LogAction("Child 5"),
-            new WaitAction(1),
-            new LogAction("Child 6"),
-            new LogAction("Child 7"),
-            new LogAction("Child 8"),
-            new WaitAction(1),
-            new LogAction("Child 9"),
-        });
+            new SucceederTask(new IsWithinSight(_sourceTransform, _targetTransform, 5)),
+            new MoveTowardsAction(_sourceTransform, _targetTransform, 5)
+        }, true);
         _behaviorTree = new BehaviourTree(sequenceTask);
+        
+        // Idle until player is within sight
     }
 
     private void Update()
     {
-        if (_behaviorTree.CurrentStatus == TaskStatus.Incomplete)
+        //if (_behaviorTree.CurrentStatus == TaskStatus.Incomplete)
             _behaviorTree.Tick();
     }
 }

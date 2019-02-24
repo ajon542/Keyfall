@@ -5,10 +5,12 @@ public class SequenceTask : ITask
     private readonly List<ITask> _children;
     private int _currentChildIndex;
     private TaskStatus _currentStatus;
-
-    public SequenceTask(List<ITask> children)
+    private bool _resettable;
+    
+    public SequenceTask(List<ITask> children, bool resettable = false)
     {
         _children = children;
+        _resettable = resettable;
     }
 
     public TaskStatus Tick()
@@ -24,6 +26,7 @@ public class SequenceTask : ITask
             _currentChildIndex++;
             if (_currentChildIndex >= _children.Count)
             {
+                Complete();
                 return TaskStatus.Success;
             }
 
@@ -31,5 +34,13 @@ public class SequenceTask : ITask
         }
 
         return childStatus;
+    }
+
+    private void Complete()
+    {
+        if (!_resettable)
+            return;
+        _currentChildIndex = 0;
+        _currentStatus = TaskStatus.Incomplete;
     }
 }
