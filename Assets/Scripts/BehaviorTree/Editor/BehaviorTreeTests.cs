@@ -1,8 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.TestTools;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
 
 namespace Tests
@@ -78,9 +74,9 @@ namespace Tests
             Assert.AreEqual(TaskStatus.Incomplete, selectorTask.Tick());
         }
         
-        [TestCase(TaskStatus.Success)]
-        [TestCase(TaskStatus.Failure)]
-        public void SelectorContinuesToReturnResultAfterMultipleTicks(TaskStatus taskStatus)
+        [Test]
+        public void SelectorContinuesToReturnResultAfterMultipleTicks(
+            [Values(TaskStatus.Success, TaskStatus.Failure)]TaskStatus taskStatus)
         {
             var task = new StatusActionTask(taskStatus);
             var sequenceTask = new SelectorTask(new List<ITask> { task });

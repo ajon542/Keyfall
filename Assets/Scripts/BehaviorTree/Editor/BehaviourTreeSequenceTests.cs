@@ -1,17 +1,14 @@
-﻿using System;
-using UnityEngine;
-using UnityEditor;
-using UnityEngine.TestTools;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System.Collections.Generic;
+using RangeAttribute = NUnit.Framework.RangeAttribute;
 
 namespace Tests
 {
     public class BehaviourTreeSequenceTests
     {
-        [TestCase(TaskStatus.Success)]
-        [TestCase(TaskStatus.Failure)]
-        public void BehaviourTreeReturnsTaskStatus(TaskStatus taskStatus)
+        [Test]
+        public void BehaviourTreeReturnsTaskStatus(
+            [Values(TaskStatus.Success, TaskStatus.Failure)] TaskStatus taskStatus)
         {
             var bt = new BehaviourTree(new StatusActionTask(taskStatus));
             Assert.AreEqual(TaskStatus.Incomplete, bt.CurrentStatus);
@@ -29,9 +26,9 @@ namespace Tests
             return sequenceTask.Tick();
         }
 
-        [TestCase(TaskStatus.Success)]
-        [TestCase(TaskStatus.Failure)]
-        public void SequenceContinuesToReturnResultAfterMultipleTicks(TaskStatus taskStatus)
+        [Test]
+        public void SequenceContinuesToReturnResultAfterMultipleTicks(
+            [Values(TaskStatus.Success, TaskStatus.Failure)] TaskStatus taskStatus)
         {
             var task = new StatusActionTask(taskStatus);
             var sequenceTask = new SequenceTask(new List<ITask> {task});
@@ -40,11 +37,9 @@ namespace Tests
             Assert.AreEqual(taskStatus, sequenceTask.Tick());
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(10)]
-        public void SequenceWithSuccessChildrenReturnsIncompleteUntilAllChildrenSucceed(int iterations)
+        [Test]
+        public void SequenceWithSuccessChildrenReturnsIncompleteUntilAllChildrenSucceed(
+            [Range(1, 10)] int iterations)
         {
             var childTasks = new List<ITask>();
             for (int i = 0; i < iterations; ++i)
@@ -69,11 +64,9 @@ namespace Tests
             }
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(10)]
-        public void SequenceWithChildFailureReturnsFailure(int iterations)
+        [Test]
+        public void SequenceWithChildFailureReturnsFailure(
+            [Range(1, 10)] int iterations)
         {
             var childTasks = new List<ITask>();
             for (int i = 0; i < iterations; ++i)
@@ -100,11 +93,9 @@ namespace Tests
             }
         }
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(10)]
-        public void SequenceWithChildrenIncompleteReturnsIncomplete(int iterations)
+        [Test]
+        public void SequenceWithChildrenIncompleteReturnsIncomplete(
+            [Range(1, 10)] int iterations)
         {
             var childTasks = new List<ITask>();
             for (int i = 0; i < iterations; ++i)
